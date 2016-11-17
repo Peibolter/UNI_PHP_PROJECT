@@ -1,10 +1,15 @@
 <?php 
 
+// Definimos nuestra zona horaria
+date_default_timezone_set("Europe/Madrid");
 
 class panel{ 
     
 	function constructor($idioma,$origen)
-    { 
+    {
+
+        // incluimos el archivo de funciones
+        include '../Funciones/funciones.php';
         include('../plantilla/cabecera.php');
         include("../Funciones/comprobaridioma.php");
         $clase=new cabecera();
@@ -18,284 +23,159 @@ class panel{
         $menus=new menulateral();
         $menus->crear($idiom,$form);
         ?>
-    
-       <div id="page-wrapper">
 
-            <div class="container-fluid">
 
-                <!-- Page Heading -->
+            <div class="container-fluid calendar-table">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Dashboard <small>Statistics Overview</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-dashboard"></i> Dashboard
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-                <!-- /.row -->
+                        <div class="page-header"><h2></h2></div>
+                                <div class="pull-left form-inline"><br>
+                                        <div class="btn-group">
+                                            <button class="btn btn-primary" data-calendar-nav="prev"><< Anterior</button>
+                                            <button class="btn" data-calendar-nav="today">Hoy</button>
+                                            <button class="btn btn-primary" data-calendar-nav="next">Siguiente >></button>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-warning" data-calendar-view="year">Año</button>
+                                            <button class="btn btn-warning active" data-calendar-view="month">Mes</button>
+                                            <button class="btn btn-warning" data-calendar-view="week">Semana</button>
+                                            <button class="btn btn-warning" data-calendar-view="day">Dia</button>
+                                        </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="alert alert-info alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                                </div>
+                </div><hr>
 
                 <div class="row">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-comments fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">26</div>
-                                        <div>New Comments!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-tasks fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">12</div>
-                                        <div>New Tasks!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-shopping-cart fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">124</div>
-                                        <div>New Orders!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-support fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">13</div>
-                                        <div>Support Tickets!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                        <div id="calendar"></div> <!-- Aqui se mostrara nuestro calendario -->
+                        <br><br>
                 </div>
-                <!-- /.row -->
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-area-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                <!--ventana modal para el calendario-->
+                <div class="modal fade" id="events-modal">
+                    <div class="modal-dialog">
+                            <div class="modal-content">
+                                    <div class="modal-body" style="height: 400px">
+                                        <p>One fine body&hellip;</p>
+                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+        </div>
 
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-donut-chart"></div>
-                                <div class="text-right">
-                                    <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Tasks Panel</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="list-group">
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">just now</span>
-                                        <i class="fa fa-fw fa-calendar"></i> Calendar updated
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">4 minutes ago</span>
-                                        <i class="fa fa-fw fa-comment"></i> Commented on a post
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">23 minutes ago</span>
-                                        <i class="fa fa-fw fa-truck"></i> Order 392 shipped
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">46 minutes ago</span>
-                                        <i class="fa fa-fw fa-money"></i> Invoice 653 has been paid
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">1 hour ago</span>
-                                        <i class="fa fa-fw fa-user"></i> A new user has been added
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">2 hours ago</span>
-                                        <i class="fa fa-fw fa-check"></i> Completed task: "pick up dry cleaning"
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">yesterday</span>
-                                        <i class="fa fa-fw fa-globe"></i> Saved the world
-                                    </a>
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">two days ago</span>
-                                        <i class="fa fa-fw fa-check"></i> Completed task: "fix error on sales page"
-                                    </a>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Order #</th>
-                                                <th>Order Date</th>
-                                                <th>Order Time</th>
-                                                <th>Amount (USD)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>3326</td>
-                                                <td>10/21/2013</td>
-                                                <td>3:29 PM</td>
-                                                <td>$321.33</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3325</td>
-                                                <td>10/21/2013</td>
-                                                <td>3:20 PM</td>
-                                                <td>$234.34</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3324</td>
-                                                <td>10/21/2013</td>
-                                                <td>3:03 PM</td>
-                                                <td>$724.17</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3323</td>
-                                                <td>10/21/2013</td>
-                                                <td>3:00 PM</td>
-                                                <td>$23.71</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3322</td>
-                                                <td>10/21/2013</td>
-                                                <td>2:49 PM</td>
-                                                <td>$8345.23</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3321</td>
-                                                <td>10/21/2013</td>
-                                                <td>2:23 PM</td>
-                                                <td>$245.12</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3320</td>
-                                                <td>10/21/2013</td>
-                                                <td>2:15 PM</td>
-                                                <td>$5663.54</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3319</td>
-                                                <td>10/21/2013</td>
-                                                <td>2:13 PM</td>
-                                                <td>$943.45</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+    <script src="../js/underscore-min.js"></script>
+    <script src="../js/calendar.js"></script>
+    <script type="text/javascript">
+        (function($){
+                //creamos la fecha actual
+                var date = new Date();
+                var yyyy = date.getFullYear().toString();
+                var mm = (date.getMonth()+1).toString().length == 1 ? "0"+(date.getMonth()+1).toString() : (date.getMonth()+1).toString();
+                var dd  = (date.getDate()).toString().length == 1 ? "0"+(date.getDate()).toString() : (date.getDate()).toString();
+
+                //establecemos los valores del calendario
+                var options = {
+
+                    // definimos que los eventos se mostraran en ventana modal
+                        modal: '#events-modal', 
+
+                        // dentro de un iframe
+                        modal_type:'iframe',    
+
+                        //obtenemos los eventos de la base de datos
+                        events_source: '../Funciones/obtener_eventos.php', 
+
+                        // mostramos el calendario en el mes
+                        view: 'month',             
+
+                        // y dia actual
+                        day: yyyy+"-"+mm+"-"+dd,   
+
+
+                        // definimos el idioma por defecto
+                        language: 'es-ES', 
+
+                        //Template de nuestro calendario
+                        tmpl_path: '../tmpls/', 
+                        tmpl_cache: false,
+
+
+                        // Hora de inicio
+                        time_start: '10:00', 
+
+                        // y Hora final de cada dia
+                        time_end: '22:00',   
+
+                        // intervalo de tiempo entre las hora, en este caso son 30 minutos
+                        time_split: '30',    
+
+                        // Definimos un ancho del 100% a nuestro calendario
+                        width: '90%', 
+
+                        onAfterEventsLoad: function(events)
+                        {
+                                if(!events)
+                                {
+                                        return;
+                                }
+                                var list = $('#eventlist');
+                                list.html('');
+
+                                $.each(events, function(key, val)
+                                {
+                                        $(document.createElement('li'))
+                                                .html('<a href="' + val.url + '">' + val.title + '</a>')
+                                                .appendTo(list);
+                                });
+                        },
+                        onAfterViewLoad: function(view)
+                        {
+                                $('.page-header h2').text(this.getTitle());
+                                $('.btn-group button').removeClass('active');
+                                $('button[data-calendar-view="' + view + '"]').addClass('active');
+                        },
+                        classes: {
+                                months: {
+                                        general: 'label'
+                                }
+                        }
+                };
+
+
+                // id del div donde se mostrara el calendario
+                var calendar = $('#calendar').calendar(options); 
+
+                $('.btn-group button[data-calendar-nav]').each(function()
+                {
+                        var $this = $(this);
+                        $this.click(function()
+                        {
+                                calendar.navigate($this.data('calendar-nav'));
+                        });
+                });
+
+                $('.btn-group button[data-calendar-view]').each(function()
+                {
+                        var $this = $(this);
+                        $this.click(function()
+                        {
+                                calendar.view($this.data('calendar-view'));
+                        });
+                });
+
+                $('#first_day').change(function()
+                {
+                        var value = $(this).val();
+                        value = value.length ? parseInt(value) : null;
+                        calendar.setOptions({first_day: value});
+                        calendar.view();
+                });
+        }(jQuery));
+    </script>
 
             </div>
             <!-- /.container-fluid -->
-
-        </div>
-        <!-- /#page-wrapper -->
         <?php
         include'../plantilla/pie.php';
 	?>
