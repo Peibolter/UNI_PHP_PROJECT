@@ -32,6 +32,17 @@ class cabecera{
     <!-- Custom Fonts -->
     <link href=".././font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <!--CSS and JS Calendar-->
+    <link rel="stylesheet" href="../css/calendar.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../js/es-ES.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/moment.js"></script>
+    <script src="../datepicker/js/bootstrap-datetimepicker.js"></script>
+    <link rel="stylesheet" href="../datepicker/css/bootstrap-datetimepicker.min.css" />
+    <script src="../datepicker/js/bootstrap-datetimepicker.es.js"></script>
+
+
     <style>
     #col{
     margin-left: 400px;
@@ -48,7 +59,6 @@ class cabecera{
     <script src=".././js/plugins/morris/raphael.min.js"></script>
     <script src=".././js/plugins/morris/morris.min.js"></script>
     <script src=".././js/plugins/morris/morris-data.js"></script>
-    <script src=".././datepicker/js/jquery-1.9.1.min.js"></script>
     <script src=".././datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
 
@@ -65,7 +75,7 @@ class cabecera{
         }
     </script>
 </head>
-<body>
+<body style="background-color: white">
 
     <div id="wrapper">
         <!-- Navigation -->
