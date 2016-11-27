@@ -1,5 +1,5 @@
 <?php 
-class GrupoDelete{
+class AccionDelete{
 
 	function crear($idioma,$resultado,$form){
 
@@ -22,33 +22,33 @@ class GrupoDelete{
  				echo "<script>alert(\"".$idiom["Eliminado"]."\")</script>";
  			}
  			?>
- 			<form action="Grupo_Controller.php?BajaShow" method="post">
+ 			<form action="Accion_Controller.php?BajaShow" method="post">
 			<fieldset>
 			<input type="text" aling="right" placeholder=<?php echo $idiom['Nombre']; ?> name="buscar" ><input  type="submit" name="BajaShow" value="Buscar">
 			</fieldset>
 			</form> 
+			
 
 			<?php
- 			
+ 			echo "<a href=\"Accion_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";
  			for ($numar =0;$numar<count($form);$numar++){
 
 			echo "<div class=\"container well\">";
  			echo "<div class=\"row\">"; 
 			echo "<div class=\"col-xs-12\">";
-			echo "<form class=\"form-horizontal\" method=\"post\" action=\"..\Controlador\Grupo_Controller.php?BajaShow1=".$form[$numar]['nombre']."\">";
+			echo "<form class=\"form-horizontal\" method=\"post\" action=\"..\Controlador\Accion_Controller.php?BajaShow1=".$form[$numar]['nombre']."\">";
 			echo "<fieldset><legend>".$idiom['Grupo']."</legend>";
 			echo "<br>";
 			echo $idiom['Nombre'].":".$form[$numar]["nombre"];
 			echo "<br>";
-			echo "<a href=\"Grupo_Controller?BajaShow1=".$form[$numar]['nombre']."\""."><input type=\"image\"  src=\"..\Archivos\\eliminar.png\" width=\"20\" height=\"20\"></a>";
+			echo "<a href=\"Accion_Controller?BajaShow1=".$form[$numar]['nombre']."\""."><input type=\"image\"  src=\"..\Archivos\\eliminar.png\" width=\"20\" height=\"20\"></a>";
 			echo"</fieldset>";
 			echo"</form>";
  			echo "</div>";
 			echo "</div>";
 			echo "</div>";
-			echo "<a href=\"Funcionalidad_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";
-			
 		 	}
+
 
 ?>
 

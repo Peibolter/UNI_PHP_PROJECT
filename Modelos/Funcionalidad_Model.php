@@ -24,35 +24,26 @@ class Funcionalidad{
 				
 			return $mysqli;
 		}
-		function altaFuncionalidad($nombre,$descripcion,$acciones)
+		function altaFuncionalidadAcciones($funcionalidad,$acciones){
+
+			foreach($acciones as $accion)
+				{  
+				$mysqli=$this->conexionBD();
+				$query="INSERT INTO `fun_accion`(`NOMBRE_FUNCIONALIDADES`, `NOMBRE_ACCIONES`) VALUES ('$funcionalidad','$accion')";
+				$mysqli->query($query);
+				$mysqli->close();
+				}
+
+		}
+
+		function altaFuncionalidad($nombre,$descripcion)
 		{	
-				$alta=0;
-				$baja=0;
-				$consultar=0;
-				$modificar=0;
-				$view=0;
-				foreach($acciones as $accion)
-				{	
-            	if($accion=="Alta")
-            	{
-              		$alta=1;
-            	}
-            	if($accion=="Baja"){
-            		$baja=1;
-            	}
-            	if($accion=="Modificar"){
-            		$modificar=1;
-            	}if($accion=="Consultar"){
-            		$consultar=1;
-            	}if($accion=="VerDetalle"){
-            		$view=1;
-            	}
-            	}
 			$mysqli=$this->conexionBD();
-			$query="INSERT INTO `funcionalidades`(`NOMBRE_FUNCIONALIDAD`, `DESCRIPCION`, `CREAR`, `MODIFICAR`, `ELIMINAR`, `CONSULTAR`, `VERDETALLE`) VALUES ('$nombre','$descripcion',$alta,$modificar,$baja,$consultar,$view)";
+			$query="INSERT INTO `funcionalidades`(`NOMBRE_FUNCIONALIDAD`, `DESCRIPCION`) VALUES ('$nombre','$descripcion')";
 			$mysqli->query($query);
 			$mysqli->close();
 		}
+
 		function comprobarexiste($name)
 		{
 			$mysqli=$this->conexionBD();
@@ -67,6 +58,22 @@ class Funcionalidad{
 			}
 		}
 
+		function eliminarfungrupo($funcionalidad)
+		{
+				$mysqli=$this->conexionBD();
+				$query="DELETE FROM `fun_grupo` WHERE NOMBRE_FUNCIONALIDAD='$funcionalidad'";
+				$mysqli->query($query);
+				$mysqli->close();
+		}
+
+		function eliminarfunaccion($funcionalidad)
+		{
+				$mysqli=$this->conexionBD();
+				$query="DELETE FROM `fun_accion` WHERE `NOMBRE_FUNCIONALIDADES`='$funcionalidad'";
+				$mysqli->query($query);
+				$mysqli->close();
+		}
+
 		function bajaFuncionalidad($name)
 			{
 				$mysqli=$this->conexionBD();
@@ -77,9 +84,9 @@ class Funcionalidad{
 			}
 		
 			function crearArrrayGrupo(){
-				ini_set('auto_detect_line_endings', TRUE); 
+
 			$file = fopen("../Archivos/ArrayGrupo_usuarios.php", "w");
-		fwrite($file,"<?php class consult { function array_consultar(){". PHP_EOL);
+		fwrite($file,"<?php class consult45 { function array_consultar(){". PHP_EOL);
 				 	fwrite($file,"\$form=array(" . PHP_EOL);
 		$mysqli=$this->conexionBD();
 		$resultado=$mysqli->query("SELECT * FROM grupo");
@@ -102,32 +109,10 @@ class Funcionalidad{
 				 $mysqli->close();
 
 		}
-		function modificarFuncionalidad($name,$descripcion,$permisos)
+		function modificarFuncionalidad($name,$descripcion)
 		{
 			$mysqli=$this->conexionBD();
-				$alta=0;
-				$baja=0;
-				$consultar=0;
-				$modificar=0;
-				$view=0;
-				foreach($permisos as $permiso)
-				{	
-            	if($permiso=="Alta")
-            	{
-              		$alta=1;
-            	}
-            	if($permiso=="Baja"){
-            		$baja=1;
-            	}
-            	if($permiso=="Modificar"){
-            		$modificar=1;
-            	}if($permiso=="Consultar"){
-            		$consultar=1;
-            	}if($permiso=="VerDetalle"){
-            		$view=1;
-            	}
-            	}
-			$query="UPDATE `funcionalidades` SET `DESCRIPCION`='$descripcion',`CREAR`='$alta',`MODIFICAR`='$modificar',`ELIMINAR`='$baja',`CONSULTAR`='$consultar',`VERDETALLE`='$view' where `NOMBRE_FUNCIONALIDAD`='$name'";
+			$query="UPDATE `funcionalidades` SET `DESCRIPCION`='$descripcion' where `NOMBRE_FUNCIONALIDAD`='$name'";
 			$mysqli->query($query);
 			$mysqli->close();
 		}
@@ -146,11 +131,25 @@ class Funcionalidad{
 				$mysqli->close();
 				}
 		}
+		function modificaFuncionalidadAccion($funcionalidad,$acciones){
 
+
+				$mysqli=$this->conexionBD();
+				$query="DELETE from `fun_accion` WHERE `NOMBRE_FUNCIONALIDADES`='$funcionalidad'";
+				$mysqli->query($query);
+				$mysqli->close();
+				foreach($acciones as $accion)
+				{  
+				$mysqli=$this->conexionBD();
+				$query="INSERT INTO `fun_accion`(`NOMBRE_FUNCIONALIDADES`, `NOMBRE_ACCIONES`) VALUES ('$funcionalidad','$accion')";
+				$mysqli->query($query);
+				$mysqli->close();
+				}
+
+		}
 
 		function insertargrupoFuncionalidad($funcionalidad,$grupos){
 
-			
 			foreach($grupos as $grupo)
 			{
 			$mysqli=$this->conexionBD();
@@ -158,52 +157,53 @@ class Funcionalidad{
 			$mysqli->query($query);
 			$mysqli->close();
 			}
-			
 		}
-		function permisosdeFuncionalidades($funcionalidades){
-			
-			ini_set('auto_detect_line_endings', TRUE); 
-			$file = fopen("../Archivos/ArrayPermisosFuncionalidadades.php", "w");
-		    fwrite($file,"<?php class consultar { function array_consultar(){". PHP_EOL);
-			fwrite($file,"\$form=array(" . PHP_EOL);
-			for($numar =0;$numar<count($funcionalidades);$numar++)
-				{	
-					$mysqli=$this->conexionBD();
-					$name=$funcionalidades[$numar]["funcionalidad"];
-					$query="SELECT * FROM `funcionalidades` WHERE `NOMBRE_FUNCIONALIDAD`='$name'";
-					$resultado=$mysqli->query($query);
-			if(mysqli_num_rows($resultado)){
-				while($fila = $resultado->fetch_array())
-			{
-				$filas[] = $fila;
-			}
-			foreach($filas as $fila)
-			{ 
-				$nombre=$fila['NOMBRE_FUNCIONALIDAD'];
-				$consultar=$fila['CONSULTAR'];
-				$modificar=$fila['MODIFICAR'];
-				$detalle=$fila['VERDETALLE'];
-				$alta=$fila['CREAR'];
-				$eliminar=$fila['ELIMINAR'];
-				 fwrite($file,"array(\"nombre\"=>'$nombre',\"consultar\"=>'$consultar',\"modificar\"=>'$modificar',\"detalle\"=>'$detalle',\"alta\"=>'$alta',\"eliminar\"=>'$eliminar')," . PHP_EOL);
-				 }
-				}
+		function accionesdeFuncionalidades($funcionalidades)
+		{
+
+			$file=fopen("../Archivos/ArrayAccionesdelasFuncionalidades.php", "w");
+		    fwrite($file,"<?php class consultar60 { function array_consultar(){". PHP_EOL);
+			fwrite($file,"\$form=array(". PHP_EOL);
 				
-			$mysqli->query($query);
-			$mysqli->close();
+			foreach($funcionalidades as $funcionalidad)
+			{	
+					$mysqli=$this->conexionBD();
+					$query="SELECT * FROM `fun_accion` WHERE `NOMBRE_FUNCIONALIDADES`='$funcionalidad'";
+					$result=$mysqli->query($query);
+					
+			if ($result->num_rows > 0){
+   		  $boolean=TRUE;
+   		 while($fila = $result->fetch_assoc()){
+				if($boolean==TRUE){
+
+				$nombre=$fila['NOMBRE_FUNCIONALIDADES'];
+				fwrite($file,"array(\"nombre\"=>'$nombre',". PHP_EOL);
+					fwrite($file,"\"accion\"=>array(". PHP_EOL);
+				$boolean=FALSE;
 				}
+				$accion=$fila['NOMBRE_ACCIONES'];
+				fwrite($file,"'$accion',". PHP_EOL);
+				 }
+				 fwrite($file,")),". PHP_EOL);
+			  }
+			  //mysqli_free_result($resultado);
+			  $result->close();
+			  $mysqli->close();
+			}
 			fwrite($file,");return \$form;}}?>". PHP_EOL);
 			fclose($file);
 			
 			}
 
-		function permisosdeFuncionalidad($name){
+		function accionesdeFuncionalidad($name){
+
 			$mysqli=$this->conexionBD();
 			ini_set('auto_detect_line_endings', TRUE); 
-			$file = fopen("../Archivos/ArrayPermisosFuncionalidad.php", "w");
+			$file = fopen("../Archivos/ArrayAccionesFuncionalidad.php", "w");
+
 		    fwrite($file,"<?php class permisosfuncionalidadesss { function array_consultar(){". PHP_EOL);
 			fwrite($file,"\$form=array(" . PHP_EOL);
-			$query="SELECT * FROM `funcionalidades` WHERE `NOMBRE_FUNCIONALIDAD`='$name'";
+			$query="SELECT * FROM `fun_accion` WHERE `NOMBRE_FUNCIONALIDADES`='$name'";
 			$resultado=$mysqli->query($query);
 			if($resultado!=NULL){
 			if(mysqli_num_rows($resultado)){
@@ -213,13 +213,10 @@ class Funcionalidad{
 			}
 			foreach($filas as $fila)
 			{ 
-				$nombre=$fila['NOMBRE_FUNCIONALIDAD'];
-				$consultar=$fila['CONSULTAR'];
-				$modificar=$fila['MODIFICAR'];
-				$detalle=$fila['VERDETALLE'];
-				$alta=$fila['CREAR'];
-				$eliminar=$fila['ELIMINAR'];
-				 fwrite($file,"array(\"nombre\"=>'$nombre',\"consultar\"=>'$consultar',\"modificar\"=>'$modificar',\"detalle\"=>'$detalle',\"alta\"=>'$alta',\"eliminar\"=>'$eliminar')," . PHP_EOL);
+				$nombre=$fila['NOMBRE_FUNCIONALIDADES'];
+				$accion=$fila['NOMBRE_ACCIONES'];
+				
+				 fwrite($file,"array(\"nombre\"=>'$nombre',\"accion\"=>'$accion')," . PHP_EOL);
 				 }
 				}
 			fwrite($file,");return \$form;}}?>". PHP_EOL);
@@ -233,7 +230,6 @@ class Funcionalidad{
 
 		function crearArraGrupodeFuncionalidad($name){
 			$mysqli=$this->conexionBD();
-			ini_set('auto_detect_line_endings', TRUE); 
 			$file = fopen("../Archivos/ArraGrupodeFuncionalidad.php", "w");
 		    fwrite($file,"<?php class grupos1 { function array_consultar(){". PHP_EOL);
 			fwrite($file,"\$form=array(" . PHP_EOL);
@@ -253,7 +249,8 @@ class Funcionalidad{
 			 }
 			 }
 			fwrite($file,");return \$form;}}?>". PHP_EOL);
-		}else{ fwrite($file,");return \$form;}}?>". PHP_EOL);}	
+		}
+		else{ fwrite($file,");return \$form;}}?>". PHP_EOL);}	
 			fclose($file);
 			$mysqli->query($query);
 			$mysqli->close();
@@ -292,12 +289,11 @@ class Funcionalidad{
 
 		function crearArrrayFuncionalidad($name){
 			
-			ini_set('auto_detect_line_endings', TRUE); 
 			$file = fopen("../Archivos/ArrayFuncionalidad.php", "w");
 		fwrite($file,"<?php class consult { function array_consultar(){". PHP_EOL);
 				 	fwrite($file,"\$form=array(" . PHP_EOL);
 		$mysqli=$this->conexionBD();
-		$resultado=$mysqli->query("SELECT * FROM funcionalidades where `NOMBRE_FUNCIONALIDAD`='$name' ");
+		$resultado=$mysqli->query("SELECT * FROM `funcionalidades` where `NOMBRE_FUNCIONALIDAD`='$name' ");
 		if(mysqli_num_rows($resultado)){
 		while($fila = $resultado->fetch_array())
 			{
@@ -307,20 +303,39 @@ class Funcionalidad{
 			{ 
 				$nombre=$fila['NOMBRE_FUNCIONALIDAD'];
 				$descripcion=$fila['DESCRIPCION'];
-				$consultar=$fila['CONSULTAR'];
-				$eliminar=$fila['ELIMINAR'];
-				$crear=$fila['CREAR'];
-				$modificar=$fila['MODIFICAR'];
-				$verdetalle=$fila['VERDETALLE'];
-				 fwrite($file,"array(\"nombre\"=>'$nombre',\"descripcion\"=>'$descripcion',\"consultar\"=>'$consultar',\"eliminar\"=>'$eliminar',\"crear\"=>'$crear',
-				 	\"verdetalle\"=>'$verdetalle',\"modificar\"=>'$modificar')," . PHP_EOL);
+				 fwrite($file,"array(\"nombre\"=>'$nombre',\"descripcion\"=>'$descripcion')," . PHP_EOL);
 			 }
-		}
+			}
 				 fwrite($file,");return \$form;}}?>". PHP_EOL);
 				 fclose($file);
 				 $resultado->free();
 				 $mysqli->close();
 		}
+		function funcionalidadAcciones($name){
+
+			$file = fopen("../Archivos/ArrayFuncionalidadAcciones.php", "w");
+		fwrite($file,"<?php class consult3 { function array_consultar(){". PHP_EOL);
+				 	fwrite($file,"\$form=array(" . PHP_EOL);
+		$mysqli=$this->conexionBD();
+		$resultado=$mysqli->query("SELECT * FROM `fun_accion` WHERE `NOMBRE_FUNCIONALIDADES`='$name'");
+		if(mysqli_num_rows($resultado)){
+		while($fila = $resultado->fetch_array())
+			{
+				$filas[] = $fila;
+			}
+			foreach($filas as $fila)
+			{ 
+				$nombre=$fila['NOMBRE_FUNCIONALIDADES'];
+				$accion=$fila['NOMBRE_ACCIONES'];
+				 fwrite($file,"array(\"nombre\"=>'$nombre',\"accion\"=>'$accion')," . PHP_EOL);
+			 }
+			}
+				 fwrite($file,");return \$form;}}?>". PHP_EOL);
+				 fclose($file);
+				 $resultado->free();
+				 $mysqli->close();
+		}
+
 		function consultarFuncionalidad()
 		{		
 				 ini_set('auto_detect_line_endings', TRUE); 

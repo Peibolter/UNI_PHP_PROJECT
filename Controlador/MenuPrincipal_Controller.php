@@ -25,7 +25,9 @@ session_start();
  				//Compruebo el usuario y si es verdadero lo dejo entrar y sino lo envio al login.
  				$model=new Usuario();
  				$resultado=$model->comprobarUsuario($user,$pass);
+ 				
  				if($resultado==true){
+
  				$_SESSION['usuario']=$user;
  				$grupo=$model->obtenergrupo($user);
  				$modelfunc=new funcionalidad();
@@ -33,8 +35,12 @@ session_start();
  				include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
  				$datos=new grupos1();
  				$form=$datos->array_consultar();
- 				//generamos el array con todas las funcionalidades y los permisos del grupo de usuario
- 				$modelfunc->permisosdeFuncionalidades($form);
+ 				$funcionalidades[]="";
+ 				for($numar=0;$numar<count($form);$numar++)
+				{
+					$funcionalidades[]=$form[$numar]["funcionalidad"];
+				}	
+ 				$modelfunc->accionesdeFuncionalidades($funcionalidades);
  				$idiom=new idiomas();
  				$menus=new panel();
  				$menus->constructor($idiom,$origen);

@@ -34,8 +34,30 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `gimnasioactualizado`
+-- Base de datos: `iu2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acciones`
+--
+
+CREATE TABLE `acciones` (
+  `NOMBREACCION` varchar(45) NOT NULL,
+  `DESCRIPCION` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `acciones`
+--
+
+INSERT INTO `acciones` (`NOMBREACCION`, `DESCRIPCION`) VALUES
+(\'Alta\', \'Permite Crear acciones\'),
+(\'Baja\', \'Posibilidad de Eliminar\'),
+(\'Consultar\', \'Permite Consultar \'),
+(\'Modificar\', \'Posibilidad de Modificar\'),
+(\'Ver en Detalle\', \'Posibilidad de Ver en Detalle\');
 
 -- --------------------------------------------------------
 
@@ -133,7 +155,8 @@ CREATE TABLE `categoria_actividad` (
 -- Volcado de datos para la tabla `categoria_actividad`
 --
 
-INSERT INTO `categoria_actividad` (`NOMBRE`, `DESCRIPCION`, `DESCUENTO`) VALUES( \'aerobic\',\'aerobic\', 30);
+INSERT INTO `categoria_actividad` (`NOMBRE`, `DESCRIPCION`, `DESCUENTO`) VALUES
+(\'aerobic\', \'aerobic\', 30);
 
 -- --------------------------------------------------------
 
@@ -287,22 +310,55 @@ INSERT INTO `factura` (`ID`, `IDLINEA`, `PAGADO`, `PRECIO_INSCRIPCION`, `PRECIO_
 
 CREATE TABLE `funcionalidades` (
   `NOMBRE_FUNCIONALIDAD` varchar(45) NOT NULL,
-  `DESCRIPCION` varchar(240) DEFAULT NULL,
-  `CREAR` int(11) NOT NULL,
-  `MODIFICAR` tinyint(4) NOT NULL,
-  `ELIMINAR` tinyint(4) NOT NULL,
-  `CONSULTAR` tinyint(4) NOT NULL,
-  `VERDETALLE` tinyint(4) NOT NULL
+  `DESCRIPCION` varchar(240) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `funcionalidades`
 --
 
-INSERT INTO `funcionalidades` (`NOMBRE_FUNCIONALIDAD`, `DESCRIPCION`, `CREAR`, `MODIFICAR`, `ELIMINAR`, `CONSULTAR`, `VERDETALLE`) VALUES
-(\'Gestion de Funcionalidades\', \'gestion de funcionaldad\', 1, 1, 1, 1, 1),
-(\'Gestion de Grupos\', \'hola\', 1, 1, 1, 1, 1),
-(\'Gestion de Usuarios\', \'Modificar Usuarios\', 1, 1, 1, 1, 1);
+INSERT INTO `funcionalidades` (`NOMBRE_FUNCIONALIDAD`, `DESCRIPCION`) VALUES
+(\'Gestion de Acciones\', \'Gestion de Acciones\'),
+(\'Gestion de Funcionalidades\', \'Gestion de Funcionalidades\'),
+(\'Gestion de Grupos\', \'Gestion de Grupos\'),
+(\'Gestion de Usuarios\', \'Gestion de Usuarios\');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `fun_accion`
+--
+
+CREATE TABLE `fun_accion` (
+  `NOMBRE_FUNCIONALIDADES` varchar(45) NOT NULL,
+  `NOMBRE_ACCIONES` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `fun_accion`
+--
+
+INSERT INTO `fun_accion` (`NOMBRE_FUNCIONALIDADES`, `NOMBRE_ACCIONES`) VALUES
+(\'Gestion de Funcionalidades\', \'Alta\'),
+(\'Gestion de Funcionalidades\', \'Baja\'),
+(\'Gestion de Funcionalidades\', \'Consultar\'),
+(\'Gestion de Funcionalidades\', \'Modificar\'),
+(\'Gestion de Funcionalidades\', \'Ver en Detalle\'),
+(\'Gestion de Acciones\', \'Alta\'),
+(\'Gestion de Acciones\', \'Baja\'),
+(\'Gestion de Acciones\', \'Consultar\'),
+(\'Gestion de Acciones\', \'Modificar\'),
+(\'Gestion de Acciones\', \'Ver en Detalle\'),
+(\'Gestion de Grupos\', \'Alta\'),
+(\'Gestion de Grupos\', \'Baja\'),
+(\'Gestion de Grupos\', \'Consultar\'),
+(\'Gestion de Grupos\', \'Modificar\'),
+(\'Gestion de Grupos\', \'Ver en Detalle\'),
+(\'Gestion de Usuarios\', \'Alta\'),
+(\'Gestion de Usuarios\', \'Baja\'),
+(\'Gestion de Usuarios\', \'Consultar\'),
+(\'Gestion de Usuarios\', \'Modificar\'),
+(\'Gestion de Usuarios\', \'Ver en Detalle\');
 
 -- --------------------------------------------------------
 
@@ -320,15 +376,14 @@ CREATE TABLE `fun_grupo` (
 --
 
 INSERT INTO `fun_grupo` (`NOMBRE_FUNCIONALIDAD`, `NOMBRE_GRUPO`) VALUES
+(\'Gestion de Acciones\', \'ADMIN\'),
+(\'Gestion de Acciones\', \'monitores\'),
 (\'Gestion de Funcionalidades\', \'ADMIN\'),
-(\'Gestion de Funcionalidades\', \'Prueba\'),
+(\'Gestion de Funcionalidades\', \'monitores\'),
 (\'Gestion de Grupos\', \'ADMIN\'),
 (\'Gestion de Grupos\', \'monitores\'),
-(\'Gestion de Grupos\', \'Prueba\'),
-(\'Gestion de Grupos\', \'Secretarios\'),
 (\'Gestion de Usuarios\', \'ADMIN\'),
-(\'Gestion de Usuarios\', \'monitores\'),
-(\'Gestion de Usuarios\', \'Secretarios\');
+(\'Gestion de Usuarios\', \'monitores\');
 
 -- --------------------------------------------------------
 
@@ -367,8 +422,8 @@ CREATE TABLE `grupo` (
 --
 
 INSERT INTO `grupo` (`NOMBRE_GRUPO`, `DESCRIPCION`) VALUES
-(\'ADMIN\', \'hola\'),
-(\'Prueba\', \'Prueba de grupo\');
+(\'ADMIN\', \'43242423\'),
+(\'monitores\', \'1232131\');
 
 -- --------------------------------------------------------
 
@@ -539,12 +594,18 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-
 INSERT INTO `usuario` (`ID`, `USUARIO`, `PASSWORD`, `NOMBRE`, `APELLIDOS`, `DNI`, `EMAIL`, `FOTO`, `CODIGOPOSTAL`, `DESCRIPCION`, `CUENTABANCARIA`, `GRUPO_NOMBRE_GRUPO`, `FechaNac`) VALUES
 (3, \'ADMIN\', \'73acd9a5972130b75066c82595a1fae3\', \'Pablo\', \'Gonzalez Rodriguez\', \'39476158B\', \'pablopeiboll@gmail.com\', \'images.jpg\', 36214, \'Este usuario es administrador\', \'32313131\', \'ADMIN\', \'2016-11-02\');
+
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `acciones`
+--
+ALTER TABLE `acciones`
+  ADD PRIMARY KEY (`NOMBREACCION`);
 
 --
 -- Indices de la tabla `actividad`
@@ -755,7 +816,7 @@ ALTER TABLE `alumno`
 -- AUTO_INCREMENT de la tabla `asistencia`
 --
 ALTER TABLE `asistencia`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `caja`
 --
@@ -770,27 +831,27 @@ ALTER TABLE `consultafisio`
 -- AUTO_INCREMENT de la tabla `espacio`
 --
 ALTER TABLE `espacio`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `gasto`
 --
 ALTER TABLE `gasto`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `inscripcion`
 --
 ALTER TABLE `inscripcion`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `lesion`
 --
@@ -800,7 +861,7 @@ ALTER TABLE `lesion`
 -- AUTO_INCREMENT de la tabla `linea_factura`
 --
 ALTER TABLE `linea_factura`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `notificacion`
 --
@@ -815,7 +876,7 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Restricciones para tablas volcadas
 --
@@ -937,7 +998,7 @@ ALTER TABLE `servicio`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-');			
+');
 
 		$crear_tb->execute();
 		endif;

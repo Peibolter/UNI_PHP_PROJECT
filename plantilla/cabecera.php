@@ -100,9 +100,9 @@ class cabecera{
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-flag"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu alert-dropdown">
-                        <li>
+                        <!--<li>
                             <a href="MenuPrincipal_Controller.php?idiomas=gallego"><?php echo $idioma['Gallego']; ?><input type="image" align="right" src="..\Archivos\galicia.png" height="30" width="30"></a>
-                        </li>
+                        </li>-->
                         <li>
                             <a href="MenuPrincipal_Controller.php?idiomas=español"><?php echo $idioma['Español']; ?><input type="image" align="right" src="..\Archivos\españa.gif" height="30" width="30"></a>
                         </li>

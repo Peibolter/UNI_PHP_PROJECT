@@ -10,8 +10,8 @@ class funcionalidadDelete{
         $idiom=$clases->comprobaridioma($idioma);
         $clase->crear($idiom);
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        $datos=new consultar60();
         $form1=$datos->array_consultar();
         $menus=new menulateral();
         $menus->crear($idiom,$form1);
@@ -29,6 +29,7 @@ class funcionalidadDelete{
 			</form> 
 
 			<?php
+			echo "<a href=\"Funcionalidad_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";
 			for ($numar =0;$numar<count($form);$numar++){
 
 			echo "<div class=\"container well\">";
@@ -45,7 +46,7 @@ class funcionalidadDelete{
  			echo "</div>";
 			echo "</div>";
 			echo "</div>";
-			echo "<a href=\"Funcionalidad_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";
+			
 			
 		 	}
 			

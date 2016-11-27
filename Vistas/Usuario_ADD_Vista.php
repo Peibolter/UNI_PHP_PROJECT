@@ -11,8 +11,8 @@ class UsuarioAlta{
         $idiom=$clases->comprobaridioma($idioma);
         $clase->crear($idiom);
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        $datos=new consultar60();
         $form1=$datos->array_consultar();
         $menus=new menulateral();
         $menus->crear($idiom,$form1);
@@ -32,15 +32,15 @@ class UsuarioAlta{
 			echo "<fieldset><legend>".$idiom['Usuario']."</legend>";
 			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"nombre\"> ".$idiom['Nombre'].":</label>";
 			echo "<div class=\"input-group col-sm-3\">";
-			echo "<"."input"." "."class=\"form-control\""."type=\"text\" required  name=\"Nombre\" pattern=\"[A-Za-z]{4-16}\" size="6">"; 
+			echo "<"."input"." "."class=\"form-control\""."type=\"text\" required  name=\"Nombre\" pattern=\"[A-Za-z]{4-16}\" size=\"6\" length=\"6\">"; 
 			echo "</div></div>";
 
 			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"Apellido\"id =\"Apellido\"> ".$idiom['Apellidos'].":</label>";
 			echo "<div class=\"input-group col-sm-3\">";
-			echo "<"."input"." "."class=\"form-control\""."type=text required id=Apellido name=Apellido size="25">"; 
+			echo "<"."input"." "."class=\"form-control\""."type=text required id=Apellido name=Apellido size=\"25\">"; 
 			echo "</div></div>";
 
-			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"FechaNac\"id =\"FechaNac\" size="6" onblur=\"fechacomprobar();\"> ".$idiom['FechaNac'].":</label>";
+			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"FechaNac\"id =\"FechaNac\" size=\"6\"  onblur=\"fechacomprobar();\"> ".$idiom['FechaNac'].":</label>";
 			echo "<div class=\"container\">";
             echo "<div class=\"hero-unit\">";
             echo "<div class=\"input-group col-sm-3\">";

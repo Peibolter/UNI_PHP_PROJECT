@@ -1,7 +1,7 @@
 <?php class consult { function array_consultar(){
 $form=array(
-array("nombre"=>'Pablo',"apellido1"=>'Gonzalez Rodriguez',
-					"dni"=>'39476158B',"usuario"=>'ADMIN',"email"=>'pablopeiboll@gmail.com',
-					"password"=>'73acd9a5972130b75066c82595a1fae3',"fecha"=>'2016-11-02',"grupo"=>'ADMIN',"foto"=>'images.jpg',
-					"codigopostal"=>'36214',"cuenta"=>'32313131',"descripcion"=>'Este usuario es administrador'),
+array("nombre"=>'abuser',"apellido1"=>'abuser',
+					"dni"=>'44444444f',"usuario"=>'abuser',"email"=>'abuser@abuser.com',
+					"password"=>'c500d0772b8a2c66c07a2aa8559e21f2',"fecha"=>'2016-10-31',"grupo"=>'altabaja',"foto"=>'da8e79d21c4cd27393898e088a1dd603.jpg',
+					"codigopostal"=>'2222',"cuenta"=>'22222222',"descripcion"=>'abuser'),
 );return $form;}}?>

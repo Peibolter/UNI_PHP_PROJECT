@@ -10,8 +10,8 @@
         $idiom=$clases->comprobaridioma($idioma);
         $clase->crear($idiom);
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        $datos=new consultar60();
         $form1=$datos->array_consultar();
         $menus=new menulateral();
         $menus->crear($idiom,$form1);

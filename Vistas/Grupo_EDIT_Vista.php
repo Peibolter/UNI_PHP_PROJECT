@@ -10,8 +10,8 @@ class GrupoEDIT{
         $idiom=$clases->comprobaridioma($idioma);
         $clase->crear($idiom);
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        $datos=new consultar60();
         $form1=$datos->array_consultar();
         $menus=new menulateral();
         $menus->crear($idiom,$form1);
@@ -54,7 +54,7 @@ class GrupoEDIT{
 			}
 
 						echo "</div></div>";
-			echo "<a href=\"Grupo_Controller.php?ModificarGrupo\"><input type=\"image\" onClick=\"return confirm('".$idiom['ConfirmarDelete'].":".$name."?')\" src=\"..\Archivos\\lapiz.png\" width=\"20\" height=\"20\"></a>";
+			echo "<a href=\"Grupo_Controller.php?ModificarGrupo\"><input type=\"image\" onClick=\"return confirm('".$idiom['confirmeEditName'].":".$name."?')\" src=\"..\Archivos\\lapiz.png\" width=\"20\" height=\"20\"></a>";
 			echo "</fieldset>";
 			echo "</form>";
 			echo "<a href=\"Grupo_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";

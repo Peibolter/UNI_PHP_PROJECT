@@ -9,6 +9,7 @@
   include("../Vistas/Funcionalidad_EDIT_Vista.php");
   include("../Vistas/MenuPrincipal_SHOW_Vista.php");
   include ("../Modelos/Usuario_Model.php");
+  include("../Modelos/Accion_Modelo.php");
   session_start();
 
   	if(isset($_POST['funcionalidad'])and isset($_SESSION['usuario']))
@@ -18,36 +19,55 @@
   			$vista->crear($idiom);
   		}
 
-  		if(isset($_REQUEST['Alta'])and isset($_SESSION['usuario'])){
+  		if(isset($_REQUEST['Alta'])and isset($_SESSION['usuario']))
+      {
   			$idiom=new idiomas();
         $model=new Funcionalidad();
         $model->crearArrrayGrupo();
         include("../Archivos/ArrayGrupo_usuarios.php");
-        $arrays=new consult();
+        $arrays=new consult45();
         $form=$arrays->array_consultar();
+        $modeloaccion=new Accion();
+        $modeloaccion->consultarAccion();
+        include("../Archivos/ArrayConsultarAccion.php");
+        $datos=new consult23();
+        $formacciones=$datos->array_consultar();
   			$alta=new funcionalidadAlta();
-  			$alta->crear($idiom,FALSE,$form,FALSE);
+  			$alta->crear($idiom,FALSE,$form,FALSE,$formacciones);
   		}
+
   		if (isset($_REQUEST['AltaFuncionalidad'])and isset($_SESSION['usuario']))
   		{
   			$idiom=new idiomas();
   			$nombrefuncionalidad=$_POST['Nombre'];
         $descripcion=$_POST['descripcion'];
         $model=new Funcionalidad();
+        
         if(isset($_POST['grupo'])and isset($_POST['formacciones'])and isset($_SESSION['usuario'])){
            $grupo=$_POST['grupo'];
-
            $acciones=$_POST['formacciones']; 
-              foreach($acciones as $accion)
-        { 
-          echo $accion;
-         }
   			$resultado=$model->comprobarexiste($nombrefuncionalidad);
   			if($resultado==FALSE)
   			{
         $origen="AltaFuncionalidad";
-			  $model->altaFuncionalidad($nombrefuncionalidad,$descripcion,$acciones);
+			  $model->altaFuncionalidad($nombrefuncionalidad,$descripcion);
         $model->insertargrupoFuncionalidad($nombrefuncionalidad,$grupo);
+        $model->altaFuncionalidadAcciones($nombrefuncionalidad,$acciones);
+        //actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidades[]="";
+        for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidades[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidades);
   			$idiom=new idiomas();
   			$vista=new panel();
         $vista->constructor($idiom,$origen);
@@ -55,22 +75,32 @@
   			{
         $model->crearArrrayGrupo();
         include("../Archivos/ArrayGrupo_usuarios.php");
-        $arrays=new consult();
+        $arrays=new consult45();
         $form=$arrays->array_consultar();
+        $modeloaccion=new Accion();
+        $modeloaccion->consultarAccion();
+        include("../Archivos/ArrayConsultarAccion.php");
+        $datos=new consult23();
+        $formacciones=$datos->array_consultar();
   			$alta=new funcionalidadAlta();
-  			$alta->crear($idiom,TRUE,$form,FALSE);
+  			$alta->crear($idiom,TRUE,$form,FALSE,$formacciones);
   			}
         }
         else{
           $model->crearArrrayGrupo();
         include("../Archivos/ArrayGrupo_usuarios.php");
-        $arrays=new consult();
+        $arrays=new consult45();
         $form=$arrays->array_consultar();
+        $modeloaccion=new Accion();
+        $modeloaccion->consultarAccion();
+        include("../Archivos/ArrayConsultarAccion.php");
+        $datos=new consult23();
+        $formacciones=$datos->array_consultar();
         $alta=new funcionalidadAlta();
-        $alta->crear($idiom,FALSE,$form,TRUE);
-
+        $alta->crear($idiom,FALSE,$form,TRUE,$formacciones);
        
- }		  		}
+        }
+      }
 
   		if (isset($_REQUEST['Consultar'])and isset($_SESSION['usuario']))
 		{
@@ -115,8 +145,12 @@
           include("../Archivos/ArraGrupodeFuncionalidad.php");
           $arrays=new grupos1();
           $formgrupo=$arrays->array_consultar();
+          $model->funcionalidadAcciones($name);
+          include("../Archivos/ArrayFuncionalidadAcciones.php");
+          $clase=new consult3();
+          $formaccionesfunc=$clase->array_consultar();
   				$vista=new Funcionalidad_VIEW();
-  				$vista->crear($form,$idiom,$origen,$formgrupo);
+  				$vista->crear($form,$idiom,$origen,$formgrupo,$formaccionesfunc);
   		}
       if (isset($_REQUEST['Modificar1'])and isset($_SESSION['usuario']))
       {
@@ -135,77 +169,117 @@
           $origen="Modificar"; 
           $name=$_REQUEST['Modificar2'];
           $model=new Funcionalidad();
-          //cargo los permisos de la funcionalidad
-          $model->permisosdeFuncionalidad($name);
-          include("../Archivos/ArrayPermisosFuncionalidad.php");
-          $datos=new permisosfuncionalidadesss();
-          $model->crearArrrayGrupo();
-          $form=$datos->array_consultar();
-          //cargos los grupos
-          include("../Archivos/ArrayGrupo_usuarios.php");
+          $model2=new Accion();
+          
+          //crear array de acciones
+          $model2->consultarAccion();
+          include("../Archivos/ArrayConsultarAccion.php");
+          $array=new consult23();
+          $formacciones=$array->array_consultar();
+          //acciones de la funcionalidad
+          $model->funcionalidadAcciones($name);
+          include("../Archivos/ArrayFuncionalidadAcciones.php");
+          $clase=new consult3();
+          $formaccionesfunc=$clase->array_consultar();
+
+          //array de funcionalidad
+           $model->crearArrrayFuncionalidad($name);
+          include("../Archivos/ArrayFuncionalidad.php");
           $arrays=new consult();
+          $form=$arrays->array_consultar();
+          
+          
+          //crear array de grupos
+          $model->crearArrrayGrupo();
+          include("../Archivos/ArrayGrupo_usuarios.php");
+          $arrays=new consult45();
           $formgrupo=$arrays->array_consultar();
+
           //cargo los grupos de la funcionalidad
           $model->crearArraGrupodeFuncionalidad($name);
           include("../Archivos/ArraGrupodeFuncionalidad.php");
           $arrayss=new grupos1();
           $formfuncionalidadgrupo=$arrayss->array_consultar();
           $vista=new funcionalidadEDIT();
-          $vista->crear($idiom,$form,$formgrupo,$formfuncionalidadgrupo,TRUE);
+          $vista->crear($idiom,$form,$formgrupo,$formfuncionalidadgrupo,TRUE,$formacciones,$formaccionesfunc);
       }
   		if (isset($_REQUEST['ModificarFuncionalidad'])and isset($_SESSION['usuario']))
   		{   
   			  $idiom=new idiomas();
   			  $name=$_POST['Nombre'];
+
           if(isset($_POST['grupo'])and isset($_POST['formacciones']))
           { 
           $origen="Modificar";
           $grupo=$_POST['grupo'];
-          $permisos=$_POST['formacciones'];
+          $acciones=$_POST['formacciones'];
           $descripcion=$_POST['descripcion'];
           $model=new Funcionalidad();
-  				$model->ModificarFuncionalidad($name,$descripcion,$permisos);
+  				$model->modificarFuncionalidad($name,$descripcion);
           $model->modificarFuncionalidadGrupo($name,$grupo);
-
+          $model->modificaFuncionalidadAccion($name,$acciones);
+         //actualizo los permisos conforme a las nuevas funcionalidades
           //actualizar los permisos de las funcionalidades
-
-          $model=new Usuario();
+          $model1=new Usuario();
           $user=$_SESSION['usuario'];
-          $grupo=$model->obtenergrupo($user);
-          $modelfunc=new funcionalidad();
-          $modelfunc->crearArraFuncionalidades($grupo);
-          include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
-          $datos=new grupos1();
-          $form=$datos->array_consultar();
-          //generamos el array con todas las funcionalidades y los permisos del grupo de usuario
-          $modelfunc->permisosdeFuncionalidades($form);
-          //
+        $grupo=$model1->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidades[]="";
+        for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidades[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidades);
+          //actualizar los permisos de las funcionalidades
   				$vista=new panel();
           $vista->constructor($idiom,$origen);
+
           }else{
            $idiom=new idiomas();
           $model=new Funcionalidad();
-          //cargo los permisos de la funcionalidad
-          $model->permisosdeFuncionalidad($name);
-          include("../Archivos/ArrayPermisosFuncionalidad.php");
-          $datos=new consultar();
-          $model->crearArrrayGrupo();
-          $form=$datos->array_consultar();
-          //cargos los grupos
-          include("../Archivos/ArrayGrupo_usuarios.php");
+          $model2=new Accion();
+          
+          //crear array de acciones
+          $model2->consultarAccion();
+          include("../Archivos/ArrayConsultarAccion.php");
+          $array=new consult23();
+          $formacciones=$array->array_consultar();
+          //acciones de la funcionalidad
+          $model->funcionalidadAcciones($name);
+          include("../Archivos/ArrayFuncionalidadAcciones.php");
+          $clase=new consult3();
+          $formaccionesfunc=$clase->array_consultar();
+
+          //array de funcionalidad
+           $model->crearArrrayFuncionalidad($name);
+          include("../Archivos/ArrayFuncionalidad.php");
           $arrays=new consult();
+          $form=$arrays->array_consultar();
+          
+          
+          //crear array de grupos
+          $model->crearArrrayGrupo();
+          include("../Archivos/ArrayGrupo_usuarios.php");
+          $arrays=new consult45();
           $formgrupo=$arrays->array_consultar();
+
           //cargo los grupos de la funcionalidad
           $model->crearArraGrupodeFuncionalidad($name);
           include("../Archivos/ArraGrupodeFuncionalidad.php");
           $arrayss=new grupos1();
           $formfuncionalidadgrupo=$arrayss->array_consultar();
           $vista=new funcionalidadEDIT();
-          $vista->crear($idiom,$form,$formgrupo,$formfuncionalidadgrupo,False);                
+          
+          $vista->crear($idiom,$form,$formgrupo,$formfuncionalidadgrupo,FALSE,$formacciones,$formaccionesfunc);                
               }
   			}
 
-  		if(isset($_REQUEST['Baja'])and isset($_SESSION['usuario'])){
+  		if(isset($_REQUEST['Baja'])and isset($_SESSION['usuario']))
+      {
           $idiom=new idiomas();
           $model=new Funcionalidad();
           $model->ConsultarFuncionalidad();
@@ -223,6 +297,8 @@
   			$name=$_REQUEST['BajaFuncionalidad'];
   			$model=new Funcionalidad();
   			$model->BajaFuncionalidad($name);
+        $model->eliminarfungrupo($name);
+        $model->eliminarfunaccion($name);
         $vista=new panel();
         $vista->constructor($idiom,$origen);
   			}
@@ -241,8 +317,12 @@
           include("../Archivos/ArraGrupodeFuncionalidad.php");
           $arrays=new grupos1();
           $formgrupo=$arrays->array_consultar();
+          $model->funcionalidadAcciones($name);
+          include("../Archivos/ArrayFuncionalidadAcciones.php");
+          $clase=new consult3();
+          $formaccionesfunc=$clase->array_consultar();
           $vistas=new Funcionalidad_VIEW();
-          $vistas->crear($form,$idiom,$origen,$formgrupo);
+          $vistas->crear($form,$idiom,$origen,$formgrupo,$formaccionesfunc);
         }
         if(isset($_REQUEST['BajaShow'])and isset($_SESSION['usuario']))
         {  
@@ -270,8 +350,12 @@
           include("../Archivos/ArraGrupodeFuncionalidad.php");
           $arrays=new grupos1();
           $formgrupo=$arrays->array_consultar();
+          $model->funcionalidadAcciones($name);
+          include("../Archivos/ArrayFuncionalidadAcciones.php");
+          $clase=new consult3();
+          $formaccionesfunc=$clase->array_consultar();
           $vistas=new Funcionalidad_VIEW();
-          $vistas->crear($form,$idiom,$origen,$formgrupo);
+          $vistas->crear($form,$idiom,$origen,$formgrupo,$formaccionesfunc);
          }
         if(isset($_REQUEST['ModificarView'])and isset($_SESSION['usuario']))
       {
