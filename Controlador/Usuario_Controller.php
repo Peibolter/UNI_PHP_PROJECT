@@ -8,6 +8,7 @@
   include("../Vistas/Usuario_VIEW_Vista.php");
   include("../Vistas/Usuario_EDIT_Vista.php");
   include("../Vistas/MenuPrincipal_SHOW_Vista.php");
+  include("../Modelos/Funcionalidad_Model.php");
   session_start();
 
   	if(isset($_REQUEST['usuarios']))
@@ -66,6 +67,24 @@
   			{
           $origen="Alta";
 			    $model->altaUsuario($nombreUsuario,$apellidos,$Fecha,$email,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion);
+          
+
+          	//actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidades[]="";
+         for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidades[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidades);
+        //
           $vista=new panel();
           $vista->constructor($idiom,$origen);
   			}else
@@ -196,6 +215,23 @@
         { 
           $origen="Modificar";
           $model->modificarUsuario($nombreUsuario,$apellidos,$Fecha,$email,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion);
+  			
+          	//actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidades[]="";
+         for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidades[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidades);
+
   				$idiom=new idiomas();
   				 $vista=new panel();
           $vista->constructor($idiom,$origen);
