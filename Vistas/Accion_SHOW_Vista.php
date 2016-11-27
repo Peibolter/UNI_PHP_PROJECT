@@ -44,7 +44,7 @@
 			}else{ 
 			echo "<form class=\"form-horizontal\" method=\"post\" action=\"..\Controlador\Accion_Controller.php?View=".$form[$numar]['nombre']."\">";
 			}
-			echo "<fieldset><legend>".$idiom['GrupoName']."</legend>";
+			echo "<fieldset><legend>".$idiom['Accion']."</legend>";
 			echo "<br>";
 
 			echo $idiom['Nombre'].":".$form[$numar]["nombre"];
