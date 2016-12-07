@@ -1,4 +1,4 @@
-<?php 
+<?php rgrg
 class idiomas{
 	function español(){
 $arrays=array(
