@@ -37,7 +37,7 @@ class EventosDelete{
  			echo "<div class=\"row\">"; 
 			echo "<div class=\"col-xs-12\">";
 			echo "<form class=\"form-horizontal\" method=\"post\" action=\"..\Controlador\Eventos_Controller.php?BajaShow1=".$form[$numar]['nombre']."\">";
-			echo "<fieldset><legend>Eventos</legend>";
+			echo "<fieldset><legend>".$idiom['Eventos']."</legend>";
 			echo "<br>";
 			echo $idiom['Nombre'].":".$form[$numar]["nombre"];
 			echo "<br>";
