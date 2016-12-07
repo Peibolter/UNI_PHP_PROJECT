@@ -32,13 +32,15 @@
 			}else{
 				echo "<form class=\"form-horizontal\" method=\"post\" action=\"..\Controlador\Eventos_Controller.php?View=".$form[$numar]['nombre']."\">";
 			}
-			echo "<fieldset><legend>Eventos</legend>";
+			
+			echo "<fieldset><legend>".$idiom['Eventos']."</legend>";
 			echo "<br>";
+
 			echo $idiom['Nombre'].":".$form[$numar]["nombre"];
 			echo "<br>";
-			echo "Usuario:".$form[$numar]["usuario"];
+			echo $idiom['Usuario'].":".$form[$numar]["usuario"];
 			echo "<br>";
-			echo "Espacio:".$form[$numar]["espacio"];
+			echo $idiom['Espacio'].":".$form[$numar]["espacio"];
 			echo "<br>";
 			
 			if($origen=="Baja"){
