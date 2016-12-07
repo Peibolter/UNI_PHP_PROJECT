@@ -93,7 +93,8 @@ $arrays=array(
 	"Altarealizada"=>"Insercion Realizada",
 	"Altaerronea"=>"Rellene los campos necesarios",
 	"Noviembre"=>"Noviembre",
-	"Espacio"=>"Espacio");
+	"Espacio"=>"Espacio",
+	"Eventos"=>"Eventos");
 
 return $arrays;
 }
@@ -184,7 +185,8 @@ $arrays=array(
 	"ConsultaUsaurio"=>"Consultar Usuario",
 	"Altaerronea"=>"Enche os campos necesarios",
 	"Noviembre"=>"Novembro",
-	"Espacio"=>"Espazo");
+	"Espacio"=>"Espazo",
+	"Eventos"=>"Eventos");
 
 return $arrays;
 
@@ -284,7 +286,8 @@ $arrays=array(
 	"ConsultaUsaurio"=>"Search User",
 	"Altaerronea"=>"Rellene los campos necesarios",
 	"Noviembre"=>"November",
-	"Espacio"=>"Space");
+	"Espacio"=>"Space",
+	"Eventos"=>"Events");
 
 return $arrays;
 
