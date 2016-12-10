@@ -93,7 +93,8 @@ $arrays=array(
 	"Altaerronea"=>"Rellene los campos necesarios",
 	"Noviembre"=>"Noviembre",
 	"Documentos"=>"Documentos",
-	"Espacio"=>"Espacio");
+	"Espacio"=>"Espacio",
+	"Eventos"=>"Eventos");
 
 return $arrays;
 }
@@ -184,7 +185,8 @@ $arrays=array(
 	"Altaerronea"=>"Enche os campos necesarios",
 	"Noviembre"=>"Novembro",
 	"Documentos"=>"Documentos",
-	"Espacio"=>"Espazo");
+	"Espacio"=>"Espazo",
+	"Eventos"=>"Eventos");
 
 return $arrays;
 
@@ -284,7 +286,8 @@ $arrays=array(
 	"Altaerronea"=>"Rellene los campos necesarios",
 	"Noviembre"=>"November",
 	"Documentos"=>"Documents",
-	"Espacio"=>"Space");
+	"Espacio"=>"Space",
+	"Eventos"=>"Events");
 
 return $arrays;
 
