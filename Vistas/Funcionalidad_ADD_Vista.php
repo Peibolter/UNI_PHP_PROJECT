@@ -2,20 +2,31 @@
 
 class funcionalidadAlta{
 
-	function crear($idioma,$resultado,$form,$mensaje)
+	function crear($idioma,$resultado,$form,$mensaje,$formaccions)
 	{
-			include('../plantilla/cabecera.php');
+		//incluimos el archivo de funciones
+        include '../Funciones/funciones.php';
+        include('../plantilla/cabecera.php');
         include("../Funciones/comprobaridioma.php");
-        $clase=new cabecera();
+        include("../Archivos/ArrayNotificaciondeUsuario.php");
+       
+        //comprobamos el idioma
         $clases=new comprobacion();
         $idiom=$clases->comprobaridioma($idioma);
-        $clase->crear($idiom);
+        //
+         //cargamos las notificaciones en la cabecera
+        $datos=new datos();
+        $formulario=$datos->array_consultar();
+        $clase=new cabecera();
+        $clase->crear($idiom,$formulario);
+        //
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
-        $form1=$datos->array_consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        //cargamos el array de funcionalidades acciones en el menu lateral
+        $datos=new consultar60();
+        $form54=$datos->array_consultar();
         $menus=new menulateral();
-        $menus->crear($idiom,$form1);
+        $menus->crear($idiom,$form54);
 ?>
  <?php
 
@@ -38,14 +49,13 @@ class funcionalidadAlta{
 			echo "<div class=\"input-group col-sm-3\">";
 			echo "<textarea rows=\"4\" cols=\"50\" name=\"descripcion\" required form=\"formulario\"></textarea>";
 			echo "</div></div>";
-			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"formacciones\"id =\"cuenta\"> ".$idiom['Permisos'].":</label>";
+			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"formacciones\"id =\"cuenta\"> ".$idiom['Accion'].":</label>";
 			echo "<div class=\"input-group col-sm-3\">";
-			echo "<input type=\"checkbox\" name=\"formacciones[]\" id=cuenta value=\"Alta\">".$idiom['Alta']."\n\n";
-			echo "<input type=\"checkbox\" name=\"formacciones[]\" id=cuenta value=\"Baja\">".$idiom['Baja']."\n\n";
-			echo "<input type=\"checkbox\" name=\"formacciones[]\" id=cuenta value=\"Modificar\">".$idiom['Modificar']."\n\n";
-			echo "<input type=\"checkbox\" name=\"formacciones[]\" id=cuenta value=\"Consultar\">".$idiom['Consultar']."\n\n<br>";
-			echo "<input type=\"checkbox\" name=\"formacciones[]\" id=cuenta value=\"VerDetalle\">".$idiom['VerDetalle']."<br>";
-			echo "</div></div>";
+			for($numar =0;$numar<count($formaccions);$numar++)
+							{
+							echo "<input type=\"checkbox\" name=\"formacciones[]\" value=\"".$formaccions[$numar]["nombre"]."\">".$formaccions[$numar]["nombre"]."<br>";
+							}
+						echo "</div></div>";	
 			echo "<br>";
 			echo "<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"grupo\"id =\"grupo\"> ".$idiom['GrupoName'].":</label>";
 			echo "<div class=\"input-group col-sm-3\">";

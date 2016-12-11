@@ -3,15 +3,34 @@
 	class Usuarios_Menu{
 
 		function crear($idioma){ 
-			include('../plantilla/cabecera.php');
-        	include("../Funciones/comprobaridioma.php");
-        	$clase=new cabecera();
-        	$clases=new comprobacion();
-        	$idiom=$clases->comprobaridioma($idioma);
-        	$clase->crear($idiom);
-        	include('../plantilla/menulateral.php');
-        	$menus=new menulateral();
-       		$menus->crear($idiom);
+      
+		//incluimos el archivo de funciones
+        include '../Funciones/funciones.php';
+        include('../plantilla/cabecera.php');
+        include("../Funciones/comprobaridioma.php");
+        include("../Archivos/ArrayNotificaciondeUsuario.php");
+       
+        //comprobamos el idioma
+        $clases=new comprobacion();
+        $idiom=$clases->comprobaridioma($idioma);
+        //
+         //cargamos las notificaciones en la cabecera
+        $datos=new datos();
+        $formulario=$datos->array_consultar();
+        $clase=new cabecera();
+        $clase->crear($idiom,$formulario);
+        //
+        include('../plantilla/menulateral.php');
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        //cargamos el array de funcionalidades acciones en el menu lateral
+        $datos=new consultar60();
+        $form=$datos->array_consultar();
+        $menus=new menulateral();
+        $menus->crear($idiom,$form);
+        //
+        $idiomacalendario="español";
+        if(isset($_SESSION['idioma'])){
+        $idiomacalendario=$_SESSION['idioma'];
     		?>
     
 			<div class="container well">

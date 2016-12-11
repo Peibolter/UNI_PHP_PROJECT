@@ -1,15 +1,12 @@
 <?php class consult { function array_consultar(){
 $form=array(
 array("nombre"=>'Pablo',"apellido1"=>'Gonzalez Rodriguez',
-					"dni"=>'39476158B',"usuario"=>'ADMIN',
+					"dni"=>'39686158B',"usuario"=>'ADMIN',
 					"password"=>'73acd9a5972130b75066c82595a1fae3'),
-array("nombre"=>'Pablo23313131',"apellido1"=>'Gonzalez Rodriguez',
-					"dni"=>'12131313211',"usuario"=>'admin12',
-					"password"=>'73acd9a5972130b75066c82595a1fae3'),
-array("nombre"=>'23',"apellido1"=>'Gonzalez Rodriguez',
-					"dni"=>'3321',"usuario"=>'ADMIN132',
-					"password"=>'73acd9a5972130b75066c82595a1fae3'),
-array("nombre"=>'323',"apellido1"=>'Gonzalez Rodriguez',
-					"dni"=>'1213131',"usuario"=>'ADMIN1231',
-					"password"=>'73acd9a5972130b75066c82595a1fae3'),
+array("nombre"=>'PABLO',"apellido1"=>'GONZALEZ',
+					"dni"=>'39486158B',"usuario"=>'peibolter',
+					"password"=>'bcccc684310fa8159d30596b40c9ae56'),
+array("nombre"=>'Lorena',"apellido1"=>'re',
+					"dni"=>'74008294K',"usuario"=>'carinanovoa',
+					"password"=>'caf1a3dfb505ffed0d024130f58c5cfa'),
 );return $form;}}?>

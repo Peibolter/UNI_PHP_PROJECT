@@ -2,6 +2,7 @@
 
 
 class Grupo{
+	
 
 		private $name;
 
@@ -171,6 +172,13 @@ class Grupo{
 				$mysqli->close();
 				}
 
+		}
+		function eliminarFuncionalidadGrupo($grupo){
+
+			$mysqli=$this->conexionBD();
+				$query="DELETE from `fun_grupo` WHERE `NOMBRE_GRUPO`='$grupo'";
+				$mysqli->query($query);
+				$mysqli->close();
 		}
 
 		function crearArraGrupodeFuncionalidad($name){

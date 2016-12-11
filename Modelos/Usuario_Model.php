@@ -131,6 +131,26 @@ class Usuario
 				 $mysqli->close();
 		}
 
+		function devolverfoto($user){
+
+			$foto="";
+				 $mysqli=$this->conexionBD();
+			$query="SELECT * FROM usuario where USUARIO='$user'";
+			$resultado=$mysqli->query($query);
+		if(mysqli_num_rows($resultado)){
+				while($fila = $resultado->fetch_array())
+			{
+				$filas[] = $fila;
+			}
+			foreach($filas as $fila)
+			{ 
+				 $foto=$fila['FOTO'];
+			}
+			}
+			return $foto;
+
+		}
+
 		//funcion que comprueba el usuario y la constraseña en la base de datos
 	function comprobarUsuario($user,$pass)
 	{
@@ -138,17 +158,16 @@ class Usuario
 		$query="SELECT * FROM usuario WHERE USUARIO='$user' AND PASSWORD='$pass'";
 		$resultado=$mysqli->query($query);
 		if(mysqli_num_rows($resultado)){
-
 		return true;
 		}else{
 			return false;
 		}
 	}
 	//funcion que inserta en la base de datos el usuarios con sus atributos
-	function altaUsuario($nombr,$apellidos,$fecha,$email,$usuario,$pass,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion)
+	function altaUsuario($nombr,$apellidos,$fecha,$email,$passwordemail,$usuario,$pass,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion)
 	{	
 			$mysqli=$this->conexionBD();
-			$query="INSERT INTO `usuario`(`USUARIO`, `PASSWORD`, `NOMBRE`, `APELLIDOS`, `DNI`, `GRUPO_NOMBRE_GRUPO`,`FOTO`, `CODIGOPOSTAL`, `CUENTABANCARIA`, `DESCRIPCION`, `FechaNac`,`EMAIL`) VALUES ('$usuario','$pass','$nombr','$apellidos','$dni','$grupo','$foto','$codigopostal','$cuenta','$descripcion','$fecha','$email')";
+			$query="INSERT INTO `usuario`(`USUARIO`, `PASSWORD`, `NOMBRE`, `APELLIDOS`, `DNI`, `GRUPO_NOMBRE_GRUPO`,`FOTO`, `CODIGOPOSTAL`, `CUENTABANCARIA`, `DESCRIPCION`, `FechaNac`,`EMAIL`, `EMAILPASS`) VALUES ('$usuario','$pass','$nombr','$apellidos','$dni','$grupo','$foto','$codigopostal','$cuenta','$descripcion','$fecha','$email','$passwordemail')";
 			$mysqli->query($query);
 			$mysqli->close();
 	}
@@ -158,13 +177,31 @@ class Usuario
 			$mysqli=$this->conexionBD();
 			$query="SELECT * FROM usuario where USUARIO ='$user' or  DNI='$dni'";
 			$resultado=$mysqli->query($query);
-			if(mysqli_num_rows($resultado)){
+			$row_cnt = mysqli_num_rows($resultado);
+			if($row_cnt>0){
 				$mysqli->close();
 				return TRUE;
 			}else{
 				$mysqli->close();
 				return FALSE;
 			}
+		}
+
+		function comprobardni($dni,$user){
+
+			$boolean=TRUE;
+			$mysqli=$this->conexionBD();
+			$query="SELECT * FROM usuario where USUARIO !='$user' and DNI='$dni' ";
+			$resultado=$mysqli->query($query);
+			if(mysqli_num_rows($resultado)){
+				$mysqli->close();
+				$boolean=TRUE;
+			}else{
+				$mysqli->close();
+				$boolean=FALSE;
+			}
+			return $boolean;
+
 		}
 		//funcion que te comprueba que el usuario esta en la base de datos
 		function comprobarusuarios($user){
@@ -185,7 +222,7 @@ class Usuario
 		function crearArrrayUsuario($user){
 
 			$file = fopen("../Archivos/ArrayUsuarios.php", "w");
-		fwrite($file,"<?php class consult { function array_consultar(){". PHP_EOL);
+		fwrite($file,"<?php class consult1 { function array_consultar(){". PHP_EOL);
 				 	fwrite($file,"\$form=array(" . PHP_EOL);
 		$mysqli=$this->conexionBD();
 		$resultado=$mysqli->query("SELECT * FROM usuario where USUARIO ='$user'");
@@ -208,10 +245,11 @@ class Usuario
 				 $codigopostal=$fila['CODIGOPOSTAL'];
 				 $cuenta=$fila['CUENTABANCARIA'];
 				 $descripcion=$fila['DESCRIPCION'];
+				 $emailpass=$fila['EMAILPASS'];
 				 fwrite($file,"array(\"nombre\"=>'$nombre',\"apellido1\"=>'$apellido1',
 					\"dni\"=>'$dni',\"usuario\"=>'$usuario',\"email\"=>'$email',
 					\"password\"=>'$password',\"fecha\"=>'$fechaNac',\"grupo\"=>'$grupo',\"foto\"=>'$foto',
-					\"codigopostal\"=>'$codigopostal',\"cuenta\"=>'$cuenta',\"descripcion\"=>'$descripcion')," . PHP_EOL);
+					\"codigopostal\"=>'$codigopostal',\"cuenta\"=>'$cuenta',\"descripcion\"=>'$descripcion',\"emailpass\"=>'$emailpass')," . PHP_EOL);
 			 }
 		}
 				 fwrite($file,");return \$form;}}?>". PHP_EOL);
@@ -242,10 +280,10 @@ class Usuario
 		}
 
 		//funcion que modifica al usuario con los datos recibidos del formulario
-	function modificarUsuario($nombreUsuario,$apellidos,$Fecha,$email,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion)
+	function modificarUsuario($nombreUsuario,$apellidos,$Fecha,$email,$passwordemail,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion)
 	{
 		$mysqli=$this->conexionBD();
-			$query="UPDATE `usuario` SET `USUARIO`='$usuario',`PASSWORD`='$password',`NOMBRE`='$nombreUsuario',`APELLIDOS`='$apellidos',`DNI`='$dni',`GRUPO_NOMBRE_GRUPO`='$grupo',`FOTO`='$foto',`CODIGOPOSTAL`='$codigopostal',`CUENTABANCARIA`='$cuenta',`DESCRIPCION`='$descripcion',`FechaNac`='$Fecha',`EMAIL`='$email' WHERE USUARIO='$usuario'";
+			$query="UPDATE `usuario` SET `USUARIO`='$usuario',`PASSWORD`='$password',`NOMBRE`='$nombreUsuario',`APELLIDOS`='$apellidos',`DNI`='$dni',`GRUPO_NOMBRE_GRUPO`='$grupo',`FOTO`='$foto',`CODIGOPOSTAL`='$codigopostal',`CUENTABANCARIA`='$cuenta',`DESCRIPCION`='$descripcion',`FechaNac`='$Fecha',`EMAIL`='$email',`EMAILPASS`='$passwordemail' WHERE USUARIO='$usuario'";
 			$mysqli->query($query);
 			$mysqli->close();
 	}

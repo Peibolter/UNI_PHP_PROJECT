@@ -8,6 +8,7 @@
   include("../Vistas/Usuario_VIEW_Vista.php");
   include("../Vistas/Usuario_EDIT_Vista.php");
   include("../Vistas/MenuPrincipal_SHOW_Vista.php");
+  include("../Modelos/Funcionalidad_Model.php");
   session_start();
 
   	if(isset($_REQUEST['usuarios']))
@@ -25,7 +26,7 @@
         include("../Archivos/ArrayGrupo_usuarios.php");
         $arrays=new consult();
         $form=$arrays->array_consultar();
-  			$alta->crear($idiom,TRUE,$form,null);
+  			$alta->crear($idiom,TRUE,$form,null,null);
   		}
   		if (isset($_REQUEST['AltaUsuario']))
   		{ 
@@ -41,8 +42,11 @@
         $codigopostal=$_POST['codigopostal'];
         $cuenta=$_POST['cuenta'];
         $descripcion=$_POST['descripcion'];
+        $passwordemail=$_POST['passwordemail'];
         $formatocorrecto="true";
         $msg="";
+        $form1=array("nombre"=>"$nombreUsuario","apellidos"=>"$apellidos","fecha"=>"$Fecha","dni"=>"$dni","email"=>"$email","usuario"=>"$usuario","password"=>"$password","codigopostal"=>"$codigopostal","cuenta"=>"$cuenta");
+        
         if ($_FILES['foto']['size']>200000)
         {$msg=$msg."El archivo es mayor que 200KB, debes reduzcirlo antes de subirlo";
         $formatocorrecto="false";}
@@ -65,7 +69,23 @@
         if($resultado==FALSE)
   			{
           $origen="Alta";
-			    $model->altaUsuario($nombreUsuario,$apellidos,$Fecha,$email,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion);
+			    $model->altaUsuario($nombreUsuario,$apellidos,$Fecha,$email,$passwordemail,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion);
+          	//actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidades[]="";
+         for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidades[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidades);
+        //
           $vista=new panel();
           $vista->constructor($idiom,$origen);
   			}else
@@ -76,7 +96,7 @@
         include("../Archivos/ArrayGrupo_usuarios.php");
         $arrays=new consult();
         $form=$arrays->array_consultar();
-  			$alta->crear($idiom,FALSE,$form,null);
+  			$alta->crear($idiom,FALSE,$form,null,$form1);
   			}
         }else{
           $alta=new UsuarioAlta();
@@ -85,7 +105,7 @@
         include("../Archivos/ArrayGrupo_usuarios.php");
         $arrays=new consult();
         $form=$arrays->array_consultar();
-        $alta->crear($idiom,FALSE,$form,$msg);
+        $alta->crear($idiom,FALSE,$form,$msg,$form1);
 
         }
   		}
@@ -137,7 +157,7 @@
           $model=new Usuario();
           $model->crearArrrayUsuario($usuario);
           include("../Archivos/ArrayUsuarios.php");
-          $arrays=new consult();
+          $arrays=new consult1();
           $form=$arrays->array_consultar();
           $vistas=new Usuario_VIEW();
           $vistas->crear($form,$idiom,$origen);
@@ -154,7 +174,12 @@
           include("../Archivos/ArrayGrupo_usuarios.php");
           $arrays=new consult();
           $form=$arrays->array_consultar();
-          $vista->crear($idiom,TRUE,$form,$user,null);
+
+          $model->crearArrrayUsuario($user);
+          include("../Archivos/ArrayUsuarios.php");
+          $arrays32=new consult1();
+          $formusuarios=$arrays32->array_consultar();
+          $vista->crear($idiom,TRUE,$form,$user,null,$formusuarios);
       }
   		if (isset($_REQUEST['ModificarUsuario']))
   		{
@@ -171,6 +196,7 @@
         $codigopostal=$_POST['codigopostal'];
         $cuenta=$_POST['cuenta'];
         $descripcion=$_POST['descripcion'];
+        $passwordemail=$_POST['passwordemail'];
 
         $formatocorrecto="true";
 
@@ -189,13 +215,31 @@
         $ruta=$_FILES["foto"]["tmp_name"];
         $destino="../Archivos/".$foto;
         copy($ruta,$destino);
-        $password=md5($password);
+        
         $model=new Usuario();
-        $resultado=$model->comprobarexiste($usuario,$dni);
-        if($resultado==TRUE)
+        $resultado=$model->comprobardni($dni,$usuario);
+
+        if($resultado==FALSE)
         { 
+          $password=md5($password);
           $origen="Modificar";
-          $model->modificarUsuario($nombreUsuario,$apellidos,$Fecha,$email,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion);
+          $model->modificarUsuario($nombreUsuario,$apellidos,$Fecha,$email,$passwordemail,$usuario,$password,$dni,$grupo,$foto,$codigopostal,$cuenta,$descripcion);
+  			
+          	//actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidades[]="";
+         for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidades[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidades);
   				$idiom=new idiomas();
   				 $vista=new panel();
           $vista->constructor($idiom,$origen);
@@ -207,7 +251,11 @@
          include("../Archivos/ArrayGrupo_usuarios.php");
          $arrays=new consult();
          $form=$arrays->array_consultar();
-  				$vista->crear($idiom,FALSE,$form,$usuario,null);
+         $model->crearArrrayUsuario($usuario);
+          include("../Archivos/ArrayUsuarios.php");
+          $arrays32=new consult1();
+          $formusuarios=$arrays32->array_consultar();
+  				$vista->crear($idiom,FALSE,$form,$usuario,null,$formusuarios);
   			}
         }else{
 
@@ -218,7 +266,11 @@
           include("../Archivos/ArrayGrupo_usuarios.php");
           $arrays=new consult();
           $form=$arrays->array_consultar();
-          $vista->crear($idiom,TRUE,$form,$usuario,$msg);
+           $model->crearArrrayUsuario($usuario);
+          include("../Archivos/ArrayUsuarios.php");
+          $arrays32=new consult1();
+          $formusuarios=$arrays32->array_consultar();
+          $vista->crear($idiom,TRUE,$form,$usuario,$msg,$formusuarios);
           }
   		}
       if(isset($_REQUEST['ModificarView']))
@@ -292,7 +344,7 @@
           $model=new Usuario();
           $model->crearArrrayUsuario($usuario);
           include("../Archivos/ArrayUsuarios.php");
-          $arrays=new consult();
+          $arrays=new consult1();
           $form=$arrays->array_consultar();
           $vistas=new Usuario_VIEW();
           $vistas->crear($form,$idiom,$origen);
@@ -306,7 +358,7 @@
           $model=new Usuario();
           $model->crearArrrayUsuario($usuario);
           include("../Archivos/ArrayUsuarios.php");
-          $arrays=new consult();
+          $arrays=new consult1();
           $form=$arrays->array_consultar();
           $vistas=new Usuario_VIEW();
           $vistas->crear($form,$idiom,$origen);

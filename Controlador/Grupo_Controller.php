@@ -9,6 +9,8 @@
   include("../Vistas/Grupo_EDIT_Vista.php");
   include("../Vistas/Grupo_Menu_Vista.php");
   include("../Vistas/MenuPrincipal_SHOW_Vista.php");
+  include ("../Modelos/Usuario_Model.php");
+  include("../Modelos/Funcionalidad_Model.php");
 session_start();
 
   	if(isset($_POST['grupo'])and isset($_SESSION['usuario']))
@@ -43,6 +45,23 @@ session_start();
   			{
 			  $model->altaGrupo($nombreGrupo,$descripcion);
         $model->inserGrupoFuncionalidades($nombreGrupo,$funcionalidades);
+
+        //actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidadess[]="";
+        for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidadess[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidadess);
+        //
         $origen="Alta";
   			$vista=new panel();
         $vista->constructor($idiom,$origen);
@@ -145,16 +164,29 @@ session_start();
         $origen="Modificar";
   			$idiom=new idiomas();
   			$name=$_POST['Nombre'];
+
         if(isset($_POST['funcional'])){
         $funcionalidades=$_POST['funcional'];
   			$descripcion=$_POST['descripcion'];
   			$model=new Grupo();
   				$model->modificarGrupo($name,$descripcion);
-          $model->crearArraGrupodeFuncionalidad($name);
-          include("../Archivos/ArraGrupodeFuncionalidad.php");
-          $datos=new grupos1();
-          $form=$datos->array_consultar();
           $model->modificarFuncionalidadGrupo($funcionalidades,$name);
+          //actualizo los permisos conforme a las nuevas funcionalidades
+        $model=new Usuario();
+        $user=$_SESSION['usuario'];
+        $grupo=$model->obtenergrupo($user);
+        $modelfunc=new funcionalidad();
+        $modelfunc->crearArraFuncionalidades($grupo);
+        include("../Archivos/ArrayFuncionalidadesDeGrupo.php");
+        $datos=new grupos1();
+        $form=$datos->array_consultar();
+        $funcionalidadess[]="";
+        for($numar=0;$numar<count($form);$numar++)
+        {
+          $funcionalidadess[]=$form[$numar]["funcionalidad"];
+        } 
+        $modelfunc->accionesdeFuncionalidades($funcionalidadess);
+        //
   				$vista=new panel();
           $vista->constructor($idiom,$origen);
         }else{
@@ -190,6 +222,7 @@ session_start();
   			$model=new Grupo();
   			$resultado=$model->comprobarexiste($name);
   			$model->BajaGrupo($name);
+        $model->eliminarFuncionalidadGrupo($name);
   			$vista=new panel();
         $vista->constructor($idiom,$origen);
   			}

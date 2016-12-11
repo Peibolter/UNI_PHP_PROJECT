@@ -6,28 +6,37 @@ class panel{
     
 	function constructor($idioma,$origen)
     {   
-        // Definimos nuestra zona horaria
+        //Definimos nuestra zona horaria
         date_default_timezone_set("Europe/Madrid");
-        // incluimos el archivo de funciones
+        //incluimos el archivo de funciones
         include '../Funciones/funciones.php';
         include('../plantilla/cabecera.php');
         include("../Funciones/comprobaridioma.php");
-        $clase=new cabecera();
+        include("../Archivos/ArrayNotificaciondeUsuario.php");
+       
+        //comprobamos el idioma
         $clases=new comprobacion();
         $idiom=$clases->comprobaridioma($idioma);
-        $clase->crear($idiom);
+        //
+         //cargamos las notificaciones en la cabecera
+        $datos=new datos();
+        $formulario=$datos->array_consultar();
+        $clase=new cabecera();
+        $clase->crear($idiom,$formulario);
+        //
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        //cargamos el array de funcionalidades acciones en el menu lateral
+        $datos=new consultar60();
         $form=$datos->array_consultar();
         $menus=new menulateral();
         $menus->crear($idiom,$form);
+        //
         $idiomacalendario="español";
         if(isset($_SESSION['idioma'])){
         $idiomacalendario=$_SESSION['idioma'];
         }
         ?>
-
 
             <div class="container-fluid calendar-table">
                 <div class="row">
@@ -41,8 +50,8 @@ class panel{
                                         <div class="btn-group">
                                             <button class="btn btn-warning" data-calendar-view="year"><?php echo $idiom['Ano']?></button>
                                             <button class="btn btn-warning active" data-calendar-view="month"><?php echo $idiom['Mes']?></button>
-                                            <button class="btn btn-warning" data-calendar-view="week"><?php echo $idiom['Dia']?></button>
-                                            <button class="btn btn-warning" data-calendar-view="day"><?php echo $idiom['Semana']?></button>
+                                            <button class="btn btn-warning" data-calendar-view="week"><?php  echo $idiom['Semana']?></button>
+                                            <button class="btn btn-warning" data-calendar-view="day"><?php echo $idiom['Dia']?></button>
                                         </div>
 
                                 </div>
@@ -301,6 +310,7 @@ class panel{
 	?>
     
  <?php
+ 
         if ($origen=="Baja"){
                 echo "<script>alert(\"".$idiom["EliminacionExito"]."\")</script>";
                  }

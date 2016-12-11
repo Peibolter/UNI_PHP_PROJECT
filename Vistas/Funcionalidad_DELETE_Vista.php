@@ -3,18 +3,29 @@ class funcionalidadDelete{
 
 	function crear($idioma,$resultado,$form){
 
-				include('../plantilla/cabecera.php');
+		//incluimos el archivo de funciones
+        include '../Funciones/funciones.php';
+        include('../plantilla/cabecera.php');
         include("../Funciones/comprobaridioma.php");
-        $clase=new cabecera();
+        include("../Archivos/ArrayNotificaciondeUsuario.php");
+       
+        //comprobamos el idioma
         $clases=new comprobacion();
         $idiom=$clases->comprobaridioma($idioma);
-        $clase->crear($idiom);
+        //
+         //cargamos las notificaciones en la cabecera
+        $datos=new datos();
+        $formulario=$datos->array_consultar();
+        $clase=new cabecera();
+        $clase->crear($idiom,$formulario);
+        //
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
-        $form1=$datos->array_consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        //cargamos el array de funcionalidades acciones en el menu lateral
+        $datos=new consultar60();
+        $form54=$datos->array_consultar();
         $menus=new menulateral();
-        $menus->crear($idiom,$form1);
+        $menus->crear($idiom,$form54);
 ?>
  <?php
 
@@ -24,11 +35,12 @@ class funcionalidadDelete{
  			?>
  			<form action="Funcionalidad_Controller.php?BajaShow" method="post">
 			<fieldset>
-			<input type="text" aling="right" placeholder=<?php echo $idiom['Nombre']; ?> name="buscar" ><input  type="submit" name="BajaShow" value="Buscar">
+			<input type="text" aling="right" placeholder=<?php echo $idiom['Nombre']; ?> name="buscar" ><input  type="submit" name="BajaShow" value="<?php echo $idiom['Buscar']; ?>">
 			</fieldset>
 			</form> 
 
 			<?php
+			echo "<a href=\"Funcionalidad_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";
 			for ($numar =0;$numar<count($form);$numar++){
 
 			echo "<div class=\"container well\">";
@@ -45,7 +57,7 @@ class funcionalidadDelete{
  			echo "</div>";
 			echo "</div>";
 			echo "</div>";
-			echo "<a href=\"Funcionalidad_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";
+			
 			
 		 	}
 			

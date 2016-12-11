@@ -3,18 +3,29 @@ class GrupoEDIT{
 
 	function crear($idioma,$name,$formfuncionalidadgrupos,$formfuncionalidades,$mensaje){
 
-			include('../plantilla/cabecera.php');
+		//incluimos el archivo de funciones
+        include '../Funciones/funciones.php';
+        include('../plantilla/cabecera.php');
         include("../Funciones/comprobaridioma.php");
-        $clase=new cabecera();
+        include("../Archivos/ArrayNotificaciondeUsuario.php");
+       
+        //comprobamos el idioma
         $clases=new comprobacion();
         $idiom=$clases->comprobaridioma($idioma);
-        $clase->crear($idiom);
+        //
+         //cargamos las notificaciones en la cabecera
+        $datos=new datos();
+        $formulario=$datos->array_consultar();
+        $clase=new cabecera();
+        $clase->crear($idiom,$formulario);
+        //
         include('../plantilla/menulateral.php');
-        include("../Archivos/ArrayPermisosFuncionalidadades.php");
-        $datos=new consultar();
-        $form1=$datos->array_consultar();
+        include("../Archivos/ArrayAccionesdelasFuncionalidades.php");
+        //cargamos el array de funcionalidades acciones en el menu lateral
+        $datos=new consultar60();
+        $form54=$datos->array_consultar();
         $menus=new menulateral();
-        $menus->crear($idiom,$form1);
+        $menus->crear($idiom,$form54);
 
 ?>
  <?php
@@ -54,7 +65,7 @@ class GrupoEDIT{
 			}
 
 						echo "</div></div>";
-			echo "<a href=\"Grupo_Controller.php?ModificarGrupo\"><input type=\"image\" onClick=\"return confirm('".$idiom['ConfirmarDelete'].":".$name."?')\" src=\"..\Archivos\\lapiz.png\" width=\"20\" height=\"20\"></a>";
+			echo "<a href=\"Grupo_Controller.php?ModificarGrupo\"><input type=\"image\" onClick=\"return confirm('".$idiom['confirmeEditName'].":".$name."?')\" src=\"..\Archivos\\lapiz.png\" width=\"20\" height=\"20\"></a>";
 			echo "</fieldset>";
 			echo "</form>";
 			echo "<a href=\"Grupo_Controller.php?Volver\"><input type=\"image\" src=\"..\Archivos\\volver.png\" width=\"20\" height=\"20\"></a>";

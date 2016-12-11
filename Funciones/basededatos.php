@@ -34,8 +34,30 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `gimnasioactualizado`
+-- Base de datos: `iu2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acciones`
+--
+
+CREATE TABLE `acciones` (
+  `NOMBREACCION` varchar(45) NOT NULL,
+  `DESCRIPCION` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `acciones`
+--
+
+INSERT INTO `acciones` (`NOMBREACCION`, `DESCRIPCION`) VALUES
+(\'Alta\', \'Permite Crear acciones\'),
+(\'Baja\', \'Posibilidad de Eliminar\'),
+(\'Consultar\', \'Permite Consultar \'),
+(\'Modificar\', \'Posibilidad de Modificar\'),
+(\'Ver en Detalle\', \'Posibilidad de Ver en Detalle\');
 
 -- --------------------------------------------------------
 
@@ -48,15 +70,24 @@ CREATE TABLE `actividad` (
   `CATEGORIA` varchar(40) NOT NULL,
   `ESPACIO` int(3) NOT NULL,
   `USUARIO` int(3) NOT NULL,
-  `DESCRIPCION` varchar(240) NOT NULL
+  `DESCRIPCION` varchar(240) DEFAULT NULL,
+  `FECHA_INICIO` date NOT NULL,
+  `FECHA_FIN` date NOT NULL,
+  `HORA_INICIO` time NOT NULL,
+  `HORA_FIN` time NOT NULL,
+  `PRECIO` decimal(10,2) DEFAULT NULL,
+  `ALUMNOSMAX` int(11) DEFAULT NULL,
+  `DIAS` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `actividad`
 --
 
-INSERT INTO `actividad` (`NOMBRE`, `CATEGORIA`, `ESPACIO`, `USUARIO`, `DESCRIPCION`) VALUES
-(\'fitnes\', \'aerobic\', 1, 3, \'aerobic\');
+INSERT INTO `actividad` (`NOMBRE`, `CATEGORIA`, `ESPACIO`, `USUARIO`, `DESCRIPCION`, `FECHA_INICIO`, `FECHA_FIN`, `HORA_INICIO`, `HORA_FIN`, `PRECIO`, `ALUMNOSMAX`, `DIAS`) VALUES
+(\'Aerobic\', \'aerobic\', 12, 3, \'Aerobic solo lunes \', \'2016-10-01\', \'2016-12-15\', \'10:00:00\', \'12:00:00\', \'20.00\', 50, \'Lunes\'),
+(\'Zumba\', \'aerobic\', 11, 3, \'Zumba de tarde\', \'2016-12-07\', \'2017-03-08\', \'19:00:00\', \'21:00:00\', \'15.00\', 13, \'Miercoles,Viernes,Domingo\'),
+(\'Baile\', \'aerobic\', 11, 3, \'Baile semana por la tarde\', \'2016-12-15\', \'2017-01-09\', \'15:00:00\', \'16:00:00\', \'12.00\', 123, \'Lunes,Martes,Miercoles,Jueves,Viernes\');
 
 -- --------------------------------------------------------
 
@@ -66,6 +97,7 @@ INSERT INTO `actividad` (`NOMBRE`, `CATEGORIA`, `ESPACIO`, `USUARIO`, `DESCRIPCI
 
 CREATE TABLE `alumno` (
   `ID` int(3) NOT NULL,
+  `DNI` varchar(10) NOT NULL,
   `NOMBRE` varchar(20) NOT NULL,
   `APELLIDOS` varchar(100) NOT NULL,
   `NACIMIENTO` date DEFAULT NULL,
@@ -80,9 +112,12 @@ CREATE TABLE `alumno` (
 -- Volcado de datos para la tabla `alumno`
 --
 
-INSERT INTO `alumno` (`ID`, `NOMBRE`, `APELLIDOS`, `NACIMIENTO`, `DIRECCION`, `TELEFONO`, `EMAIL`, `FOTO`, `CUENTABANCARIA`) VALUES
-(1, \'pedro\', \'pedrazo\', \'2016-11-01\', \'a.v. santiago\', \'666666666\', \'lumenocaño\', NULL, \'2190293291293492492374\');
-
+INSERT INTO `alumno` (`ID`, `DNI`,`NOMBRE`, `APELLIDOS`, `NACIMIENTO`, `DIRECCION`, `TELEFONO`, `EMAIL`, `FOTO`, `CUENTABANCARIA`) VALUES
+(1, \'54875495L\', \'pedro\', \'pedrazo\', \'2016-11-01\', \'a.v. santiago\', \'666666666\', \'lumenocaño\', NULL, \'2190293291293492492374\'),
+(1, \'32143243F\', \'Roberto\', \'Fernandez\', \'1995-07-31\', \'Avenida de la habana\', \'689574854\', \'roberto@esei.uvigo.es\', \'proceso_lapiz.jpg\', \'01245784548745147826\'),
+(2, \'76543543A\', \'Sergio\', \'Vazquez\', \'2000-11-03\', \'Avenida buenos aires\', \'659874547\', \'sergio23@hotmail.com\', \'alumno.jpg\', \'01245478542145601824\'),
+(3, \'13424576M\', \'Pepe\', \'Rodriguez\', \'1998-11-28\', \'Calle Curros Enriquez\', \'685475214\', \'peperod@hotmail.com\', \'alumno1.png\', \'01452148559852460782\'),
+(4, \'24315676F\', \'Maria\', \'Giraldez\', \'2001-11-28\', \'Calle Francisco Puga\', \'654782541\', \'giramaria@.uvigo.es\', \'alumno2.jpg\', \'21546987225361872549\');
 -- --------------------------------------------------------
 
 --
@@ -90,13 +125,42 @@ INSERT INTO `alumno` (`ID`, `NOMBRE`, `APELLIDOS`, `NACIMIENTO`, `DIRECCION`, `T
 --
 
 CREATE TABLE `asistencia` (
-  `ID` int(11) NOT NULL,
+ `ID` int(11) NOT NULL,
   `USUARIO` int(3) NOT NULL,
   `ALUMNO` int(3) NOT NULL,
   `ACTIVIDAD` varchar(20) NOT NULL,
   `INICIO` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `FIN` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\'
+  `FIN` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+  `FECHA` date NOT NULL,
+  `ASISTE` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+--
+-- Volcado de datos para la tabla `asistencia`
+--
+
+INSERT INTO `asistencia` (`ID`, `USUARIO`, `ALUMNO`, `ACTIVIDAD`, `INICIO`, `FIN`, `FECHA`, `ASISTE`) VALUES
+(112429, 24, 1, \'FITNESS\', \'2016-12-06 08:59:52\', \'0000-00-00 00:00:00\', \'2016-12-01\', 1),
+(112430, 24, 2, \'FITNESS\', \'2016-12-06 08:59:52\', \'0000-00-00 00:00:00\', \'2016-12-01\', 1),
+(112431, 24, 3, \'FITNESS\', \'2016-12-06 08:59:52\', \'0000-00-00 00:00:00\', \'2016-12-01\', 1),
+(112432, 24, 4, \'FITNESS\', \'2016-12-06 08:59:52\', \'0000-00-00 00:00:00\', \'2016-12-01\', 1),
+(112433, 24, 3, \'PILATES\', \'2016-12-06 08:59:52\', \'0000-00-00 00:00:00\', \'2016-12-01\', 0),
+(112434, 24, 4, \'PILATES\', \'2016-12-06 08:59:52\', \'0000-00-00 00:00:00\', \'2016-12-01\', 0),
+(112435, 23, 1, \'RUNNING\', \'2016-12-06 09:00:14\', \'0000-00-00 00:00:00\', \'2016-11-11\', 0),
+(112436, 23, 2, \'RUNNING\', \'2016-12-06 09:00:14\', \'0000-00-00 00:00:00\', \'2016-11-11\', 1),
+(112437, 23, 4, \'YOGA\', \'2016-12-06 09:00:14\', \'0000-00-00 00:00:00\', \'2016-11-11\', 0),
+(112438, 23, 2, \'YOGA\', \'2016-12-06 09:00:14\', \'0000-00-00 00:00:00\', \'2016-11-11\', 0),
+(112439, 24, 1, \'FITNESS\', \'2016-12-06 09:00:31\', \'0000-00-00 00:00:00\', \'2016-11-10\', 1),
+(112440, 24, 2, \'FITNESS\', \'2016-12-06 09:00:31\', \'0000-00-00 00:00:00\', \'2016-11-10\', 1),
+(112441, 24, 3, \'FITNESS\', \'2016-12-06 09:00:31\', \'0000-00-00 00:00:00\', \'2016-11-10\', 1),
+(112442, 24, 4, \'FITNESS\', \'2016-12-06 09:00:31\', \'0000-00-00 00:00:00\', \'2016-11-10\', 1),
+(112443, 24, 3, \'PILATES\', \'2016-12-06 09:00:31\', \'0000-00-00 00:00:00\', \'2016-11-10\', 0),
+(112444, 24, 4, \'PILATES\', \'2016-12-06 09:00:31\', \'0000-00-00 00:00:00\', \'2016-11-10\', 0),
+(112445, 23, 1, \'RUNNING\', \'2016-12-06 09:00:44\', \'0000-00-00 00:00:00\', \'2016-11-30\', 0),
+(112446, 23, 2, \'RUNNING\', \'2016-12-06 09:00:44\', \'0000-00-00 00:00:00\', \'2016-11-30\', 1),
+(112447, 23, 4, \'YOGA\', \'2016-12-06 09:00:44\', \'0000-00-00 00:00:00\', \'2016-11-30\', 1),
+(112448, 23, 2, \'YOGA\', \'2016-12-06 09:00:44\', \'0000-00-00 00:00:00\', \'2016-11-30\', 0);
 
 -- --------------------------------------------------------
 
@@ -105,8 +169,10 @@ CREATE TABLE `asistencia` (
 --
 
 CREATE TABLE `caja` (
-  `ID` int(3) NOT NULL,
-  `USUARIOID` int(3) NOT NULL,
+   `ID` int(3) NOT NULL,
+  `CANTIDAD_GASTOS` varchar(10) NOT NULL,
+  `CANTIDAD_INGRESOS` varchar(10) NOT NULL,
+  `FECHA` date NOT NULL,
   `TOTALEFECTIVO` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -114,8 +180,8 @@ CREATE TABLE `caja` (
 -- Volcado de datos para la tabla `caja`
 --
 
-INSERT INTO `caja` (`ID`, `USUARIOID`, `TOTALEFECTIVO`) VALUES
-(1, 3, 0);
+INSERT INTO `caja` (`ID`, `CANTIDAD_GASTOS`,`CANTIDAD_INGRESOS`,`FECHA`, `TOTALEFECTIVO`) VALUES
+(1, 30, 50, \'2016-11-17 23:00:00\', 20);
 
 -- --------------------------------------------------------
 
@@ -133,7 +199,10 @@ CREATE TABLE `categoria_actividad` (
 -- Volcado de datos para la tabla `categoria_actividad`
 --
 
-INSERT INTO `categoria_actividad` (`NOMBRE`, `DESCRIPCION`, `DESCUENTO`) VALUES( \'aerobic\',\'aerobic\', 30);
+INSERT INTO `categoria_actividad` (`NOMBRE`, `DESCRIPCION`, `DESCUENTO`) VALUES
+(\'noaerobic\', \'No aerobic.\', 0),
+(\'running\', \'running\', 0),
+(\'strenght\', \'strenght\', 30);
 
 -- --------------------------------------------------------
 
@@ -191,7 +260,17 @@ CREATE TABLE `descuento` (
 --
 
 INSERT INTO `descuento` (`ID`, `CANTIDAD`) VALUES
-(30, 0);
+(30, 0),
+(0, 11),
+(33, 33);
+
+-- --------------------------------------------------------
+CREATE TABLE `documentos` (
+  `ID` int(11) NOT NULL,
+  `NOMBRE` varchar(100) NOT NULL,
+  `DOCUMENTO` blob NOT NULL,
+  `IDUSUARIO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -224,19 +303,18 @@ INSERT INTO `empleado` (`DNI`, `NOMBRE`, `APELLIDO`, `NACIMIENTO`, `DIRECCION`, 
 --
 
 CREATE TABLE `espacio` (
-  `ID` int(11) NOT NULL,
-  `USUARIO` int(3) NOT NULL,
-  `INICIO` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `FIN` timestamp NOT NULL DEFAULT \'0000-00-00 00:00:00\',
-  `DISPONIBILIDAD` tinyint(1) NOT NULL
+   `ID` int(11) NOT NULL,
+  `NOMBRE` varchar(240) NOT NULL,
+  `DESCRIPCION` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `espacio`
 --
 
-INSERT INTO `espacio` (`ID`, `USUARIO`, `INICIO`, `FIN`, `DISPONIBILIDAD`) VALUES
-(1, 3, \'2016-11-17 23:00:00\', \'2016-11-18 23:00:00\', 1);
+INSERT INTO `espacio` (`ID`, `NOMBRE`, `DESCRIPCION`) VALUES
+(11, \'Salon A\', \'Salon grande de la zona A\'),
+(12, \'Patio\', \'Patio de la sala B\');
 
 -- --------------------------------------------------------
 
@@ -287,22 +365,136 @@ INSERT INTO `factura` (`ID`, `IDLINEA`, `PAGADO`, `PRECIO_INSCRIPCION`, `PRECIO_
 
 CREATE TABLE `funcionalidades` (
   `NOMBRE_FUNCIONALIDAD` varchar(45) NOT NULL,
-  `DESCRIPCION` varchar(240) DEFAULT NULL,
-  `CREAR` int(11) NOT NULL,
-  `MODIFICAR` tinyint(4) NOT NULL,
-  `ELIMINAR` tinyint(4) NOT NULL,
-  `CONSULTAR` tinyint(4) NOT NULL,
-  `VERDETALLE` tinyint(4) NOT NULL
+  `DESCRIPCION` varchar(240) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `funcionalidades`
 --
 
-INSERT INTO `funcionalidades` (`NOMBRE_FUNCIONALIDAD`, `DESCRIPCION`, `CREAR`, `MODIFICAR`, `ELIMINAR`, `CONSULTAR`, `VERDETALLE`) VALUES
-(\'Gestion de Funcionalidades\', \'gestion de funcionaldad\', 1, 1, 1, 1, 1),
-(\'Gestion de Grupos\', \'hola\', 1, 1, 1, 1, 1),
-(\'Gestion de Usuarios\', \'Modificar Usuarios\', 1, 1, 1, 1, 1);
+INSERT INTO `funcionalidades` (`NOMBRE_FUNCIONALIDAD`, `DESCRIPCION`) VALUES
+(\'Crear Notificacion\', \'notificaicon\'),
+(\'Crear Notificacion Correo\', \'Notificaciones\'),
+(\'Gestion de Acciones\', \'Gestion de Acciones\'),
+(\'Gestion de Categorias\', \'Gestion de Categorias\'),
+(\'Gestion de Inscripciones\', \'Gestion de Inscripciones\'),
+(\'Gestion de Funcionalidades\', \'Gestion de Funcionalidades\'),
+(\'Gestion de Grupos\', \'Gestion de Grupos\'),
+(\'Gestion de Alumnos\', \'Gestion de Alumnos\'),
+(\'Gestion de Asistencia\', \'Gestion de Asistencia\'),
+(\'Gestion de Usuarios\', \'Gestion de Usuarios\'),
+(\'Gestion de Espacios\', \'Gestion de Espacios\'),
+(\'Gestion de Actividades\', \'Gestion de Actividades\'),
+(\'Gestion de Reservas de Espacios\', \'Gestion de Reservas de Espacios\'),
+(\'Gestion de Reservas de Actividades\', \'Gestion de Reservas de Actividades\'),
+(\'Gestion de Descuentos\', \'Gestion de Descuentos\'),
+(\'Gestion de Reservas\', \'Gestion de Reservas\'),
+(\'Gestion de Eventos\', \'Gestion de Eventos\'),
+(\'Gestion de Documentos\', \'Gestion de Documentos\');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `fun_accion`
+--
+
+CREATE TABLE `fun_accion` (
+  `NOMBRE_FUNCIONALIDADES` varchar(45) NOT NULL,
+  `NOMBRE_ACCIONES` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `fun_accion`
+--
+
+INSERT INTO `fun_accion` (`NOMBRE_FUNCIONALIDADES`, `NOMBRE_ACCIONES`) VALUES
+(\'Gestion de Funcionalidades\', \'Alta\'),
+(\'Gestion de Funcionalidades\', \'Baja\'),
+(\'Gestion de Funcionalidades\', \'Consultar\'),
+(\'Gestion de Funcionalidades\', \'Modificar\'),
+(\'Gestion de Funcionalidades\', \'Ver en Detalle\'),
+(\'Gestion de Acciones\', \'Alta\'),
+(\'Gestion de Acciones\', \'Baja\'),
+(\'Gestion de Acciones\', \'Consultar\'),
+(\'Gestion de Acciones\', \'Modificar\'),
+(\'Gestion de Acciones\', \'Ver en Detalle\'),
+(\'Gestion de Grupos\', \'Alta\'),
+(\'Gestion de Grupos\', \'Baja\'),
+(\'Gestion de Grupos\', \'Consultar\'),
+(\'Gestion de Grupos\', \'Modificar\'),
+(\'Gestion de Grupos\', \'Ver en Detalle\'),
+(\'Gestion de Usuarios\', \'Alta\'),
+(\'Gestion de Usuarios\', \'Baja\'),
+(\'Gestion de Usuarios\', \'Consultar\'),
+(\'Gestion de Usuarios\', \'Modificar\'),
+(\'Gestion de Usuarios\', \'Ver en Detalle\'),
+(\'Crear Notificacion\', \'Alta\'),
+(\'Crear Notificacion Correo\', \'Alta\'),
+(\'Gestion de Alumnos\', \'Alta\'),
+(\'Gestion de Alumnos\', \'Baja\'),
+(\'Gestion de Alumnos\', \'Consultar\'),
+(\'Gestion de Alumnos\', \'Modificar\'),
+(\'Gestion de Alumnos\', \'Ver en Detalle\'),
+(\'Gestion de Asistencia\', \'Alta\'),
+(\'Gestion de Asistencia\', \'Baja\'),
+(\'Gestion de Asistencia\', \'Consultar\'),
+(\'Gestion de Asistencia\', \'Modificar\'),
+(\'Gestion de Asistencia\', \'Ver en Detalle\'),
+(\'Gestion de Actividades\', \'Alta\'),
+(\'Gestion de Actividades\', \'Baja\'),
+(\'Gestion de Actividades\', \'Consultar\'),
+(\'Gestion de Actividades\', \'Modificar\'),
+(\'Gestion de Actividades\', \'Ver en Detalle\'),
+(\'Gestion de Inscripciones\', \'Alta\'),
+(\'Gestion de Inscripciones\', \'Baja\'),
+(\'Gestion de Inscripciones\', \'Consultar\'),
+(\'Gestion de Inscripciones\', \'Modificar\'),
+(\'Gestion de Inscripciones\', \'Ver en Detalle\'),
+(\'Gestion de Categorias\', \'Alta\'),
+(\'Gestion de Categorias\', \'Baja\'),
+(\'Gestion de Categorias\', \'Consultar\'),
+(\'Gestion de Categorias\', \'Modificar\'),
+(\'Gestion de Categorias\', \'Ver en Detalle\'),
+(\'Gestion de Espacios\', \'Alta\'),
+(\'Gestion de Espacios\', \'Baja\'),
+(\'Gestion de Espacios\', \'Consultar\'),
+(\'Gestion de Espacios\', \'Modificar\'),
+(\'Gestion de Espacios\', \'Ver en Detalle\'),
+(\'Gestion de Reservas de Espacios\', \'Alta\'),
+(\'Gestion de Reservas de Espacios\', \'Baja\'),
+(\'Gestion de Reservas de Espacios\', \'Consultar\'),
+(\'Gestion de Reservas de Espacios\', \'Modificar\'),
+(\'Gestion de Reservas de Espacios\', \'Ver en Detalle\'),
+(\'Gestion de Reservas de Actividades\', \'Alta\'),
+(\'Gestion de Reservas de Actividades\', \'Baja\'),
+(\'Gestion de Reservas de Actividades\', \'Consultar\'),
+(\'Gestion de Reservas de Actividadess\', \'Modificar\'),
+(\'Gestion de Reservas de Actividades\', \'Ver en Detalle\'),
+(\'Gestion de Reservas de Espacios\', \'Alta\'),
+(\'Gestion de Reservas de Espacios\', \'Baja\'),
+(\'Gestion de Reservas de Espacios\', \'Consultar\'),
+(\'Gestion de Reservas de Espacios\', \'Modificar\'),
+(\'Gestion de Reservas de Espacios\', \'Ver en Detalle\'),
+(\'Gestion de Descuentos\', \'Alta\'),
+(\'Gestion de Descuentos\', \'Baja\'),
+(\'Gestion de Descuentos\', \'Consultar\'),
+(\'Gestion de Descuentos\', \'Modificar\'),
+(\'Gestion de Descuentos\', \'Ver en Detalle\'),
+(\'Gestion de Reservas\', \'Alta\'),
+(\'Gestion de Reservas\', \'Baja\'),
+(\'Gestion de Reservas\', \'Consultar\'),
+(\'Gestion de Reservas\', \'Modificar\'),
+(\'Gestion de Reservas\', \'Ver en Detalle\'),
+(\'Gestion de Eventos\', \'Alta\'),
+(\'Gestion de Eventos\', \'Baja\'),
+(\'Gestion de Eventos\', \'Consultar\'),
+(\'Gestion de Eventos\', \'Modificar\'),
+(\'Gestion de Eventos\', \'Ver en Detalle\'),
+(\'Gestion de Documentos\', \'Alta\'),
+(\'Gestion de Documentos\', \'Baja\'),
+(\'Gestion de Documentos\', \'Consultar\'),
+(\'Gestion de Documentos\', \'Modificar\'),
+(\'Gestion de Documentos\', \'Ver en Detalle\');
 
 -- --------------------------------------------------------
 
@@ -320,15 +512,41 @@ CREATE TABLE `fun_grupo` (
 --
 
 INSERT INTO `fun_grupo` (`NOMBRE_FUNCIONALIDAD`, `NOMBRE_GRUPO`) VALUES
+(\'Crear Notificacion\', \'ADMIN\'),
+(\'Crear Notificacion\', \'monitores\'),
+(\'Crear Notificacion Correo\', \'ADMIN\'),
+(\'Crear Notificacion Correo\', \'monitores\'),
+(\'Gestion de Acciones\', \'ADMIN\'),
+(\'Gestion de Acciones\', \'monitores\'),
 (\'Gestion de Funcionalidades\', \'ADMIN\'),
-(\'Gestion de Funcionalidades\', \'Prueba\'),
+(\'Gestion de Funcionalidades\', \'monitores\'),
 (\'Gestion de Grupos\', \'ADMIN\'),
 (\'Gestion de Grupos\', \'monitores\'),
-(\'Gestion de Grupos\', \'Prueba\'),
-(\'Gestion de Grupos\', \'Secretarios\'),
+(\'Gestion de Categorias\', \'ADMIN\'),
+(\'Gestion de Inscripciones\', \'ADMIN\'),
+(\'Gestion de Inscripciones\', \'monitores\'),
 (\'Gestion de Usuarios\', \'ADMIN\'),
 (\'Gestion de Usuarios\', \'monitores\'),
-(\'Gestion de Usuarios\', \'Secretarios\');
+(\'Gestion de Alumnos\', \'ADMIN\'),
+(\'Gestion de Alumnos\', \'monitores\'),
+(\'Gestion de Asistencia\', \'ADMIN\'),
+(\'Gestion de Asistencia\', \'monitores\'),
+(\'Gestion de Actividades\', \'ADMIN\'),
+(\'Gestion de Actividades\', \'monitores\'),
+(\'Gestion de Espacios\', \'ADMIN\'),
+(\'Gestion de Espacios\', \'monitores\'),
+(\'Gestion de Reservas de Actividades\', \'ADMIN\'),
+(\'Gestion de Reservas de Actividades\', \'monitores\'),
+(\'Gestion de Reservas de Espacios\', \'ADMIN\'),
+(\'Gestion de Descuentos\', \'ADMIN\'),
+(\'Gestion de Descuentos\', \'monitores\'),
+(\'Gestion de Reservas\', \'ADMIN\'),
+(\'Gestion de Reservas\', \'monitores\'),
+(\'Gestion de Eventos\', \'ADMIN\'),
+(\'Gestion de Eventos\', \'monitores\'),
+(\'Gestion de Documentos\', \'ADMIN\'),
+(\'Gestion de Documentos\', \'monitores\')
+;
 
 -- --------------------------------------------------------
 
@@ -367,8 +585,8 @@ CREATE TABLE `grupo` (
 --
 
 INSERT INTO `grupo` (`NOMBRE_GRUPO`, `DESCRIPCION`) VALUES
-(\'ADMIN\', \'hola\'),
-(\'Prueba\', \'Prueba de grupo\');
+(\'ADMIN\', \'43242423\'),
+(\'monitores\', \'1232131\');
 
 -- --------------------------------------------------------
 
@@ -392,7 +610,11 @@ CREATE TABLE `inscripcion` (
 --
 
 INSERT INTO `inscripcion` (`ID`, `USUARIO`, `ALUMNO`, `ACTIVIDAD`, `EVENTO`, `FECHA`, `FORMA_PAGO`, `TIEMPO_PAGO`) VALUES
-(1, 3, 1, \'fitnes\', 1, \'2016-11-17 23:00:00\', \'EFECTIVO\', \'MENSUAL\');
+(36, 3, 2, \'cardio\', 1, \'2016-11-28 23:00:00\', \'EFECTIVO\', \'MENSUAL\'),
+(37, 3, 1, \'fitnes\', 1, \'2016-12-05 23:00:00\', \'EFECTIVO\', \'MENSUAL\'),
+(38, 3, 2, \'cardio\', 2, \'2016-12-11 12:23:26\', \'TARJETA\', \'SEMANAL\'),
+(39, 3, 2, \'fitnes\', 2, \'2016-12-11 12:23:42\', \'EFECTIVO\', \'MENSUAL\'),
+(40, 3, 1, \'cardio\', 1, \'2016-12-11 12:23:59\', \'TARJETA\', \'ANUAL\');
 
 -- --------------------------------------------------------
 
@@ -421,9 +643,9 @@ INSERT INTO `lesion` (`ID`, `EMPLEADO`, `ALUMNO`, `DESCRIPCION`) VALUES
 --
 
 CREATE TABLE `linea_factura` (
-  `ID` int(11) NOT NULL,
+ `ID` int(11) NOT NULL,
   `CANTIDAD` int(6) NOT NULL,
-  `USUARIO` int(3) NOT NULL,
+  `USUARIO` varchar(30) NOT NULL,
   `INSCRIPCION` int(3) DEFAULT NULL,
   `FISIO` int(3) DEFAULT NULL,
   `FECHA` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -437,7 +659,7 @@ CREATE TABLE `linea_factura` (
 --
 
 INSERT INTO `linea_factura` (`ID`, `CANTIDAD`, `USUARIO`, `INSCRIPCION`, `FISIO`, `FECHA`, `DESCUENTO`, `TIEMPO_PAGO`, `FORMA_PAGO`) VALUES
-(1, 50, 3, 1, NULL, \'2016-11-17 23:00:00\', 30, \'MENSUAL\', \'EFECTIVO\');
+(1, 50,\'Manuel\', 1, NULL, \'2016-11-17 23:00:00\', 30, \'MENSUAL\', \'EFECTIVO\');
 
 -- --------------------------------------------------------
 
@@ -483,16 +705,22 @@ INSERT INTO `not-usu` (`IDNOT`, `IDUSU`) VALUES
 
 CREATE TABLE `notificacion` (
   `ID` int(11) NOT NULL,
-  `USUARIO` int(3) DEFAULT NULL,
-  `COMENTARIO` varchar(240) NOT NULL
+  `USUARIO` varchar(40) NOT NULL,
+  `COMENTARIO` varchar(240) NOT NULL,
+  `FECHATIME` datetime NOT NULL,
+  `USUARIOORIGEN` varchar(40) NOT NULL,
+  `VISTO` tinyint(1) NOT NULL,
+  `FOTO` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `notificacion`
 --
 
-INSERT INTO `notificacion` (`ID`, `USUARIO`, `COMENTARIO`) VALUES
-(3, 3, \'bienvenidos\');
+INSERT INTO `notificacion` (`ID`, `USUARIO`, `COMENTARIO`, `FECHATIME`, `USUARIOORIGEN`, `VISTO`, `FOTO`) VALUES
+(129, \'peibolter\', \'Bienvenido\', \'2016-12-03 20:16:40\', \'LORENA\', 1, \'321.jpg\'),
+(133, \'ADMIN\', \'Bienvenido  \', \'2016-12-03 20:29:30\', \'Juan\', 1, \'321.jpg\'),
+(134, \'peibolter\', \'Bienvenido \', \'2016-12-03 20:29:30\', \'Juan\', 1, \'321.jpg\');
 
 -- --------------------------------------------------------
 
@@ -527,6 +755,7 @@ CREATE TABLE `usuario` (
   `APELLIDOS` varchar(100) DEFAULT NULL,
   `DNI` varchar(45) DEFAULT NULL,
   `EMAIL` varchar(45) NOT NULL,
+  `EMAILPASS` varchar(125) NOT NULL,
   `FOTO` varchar(100) DEFAULT NULL,
   `CODIGOPOSTAL` int(11) DEFAULT NULL,
   `DESCRIPCION` varchar(100) DEFAULT NULL,
@@ -539,12 +768,22 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
+INSERT INTO `usuario` (`ID`, `USUARIO`, `PASSWORD`, `NOMBRE`, `APELLIDOS`, `DNI`, `EMAIL`, `EMAILPASS`, `FOTO`, `CODIGOPOSTAL`, `DESCRIPCION`, `CUENTABANCARIA`, `GRUPO_NOMBRE_GRUPO`, `FechaNac`) VALUES
+(3, \'ADMIN\', \'73acd9a5972130b75066c82595a1fae3\', \'Pablo\', \'Gonzalez Rodriguez\', \'39686158B\', \'pablopeiboll@gmail.com\', \'mauroesgay660683298\', \'321.jpg\', 36214, \'34242\', \'32313131\', \'ADMIN\', \'2016-11-02\'),
+(6, \'peibolter\', \'bcccc684310fa8159d30596b40c9ae56\', \'PABLO\', \'GONZALEZ\', \'39486158B\', \'pablopeiboll@gmail.com\', \'\', \'321.jpg\', 36214, \'434343\', \'12323232\', \'ADMIN\', \'2016-11-30\'),
+(9, \'Lorena12\', \'bef693ec4e9284b472ab22d0da92a842\', \'Lorena\', \'Carina\', \'34631282K\', \'pablopeiboll@gmail.com\', \'mauroesgay660683298\', \'321.jpg\', 36214, \'42342\', \'4342\', \'ADMIN\', \'2016-12-16\'),
+(23, \'monitor1\', \'73acd9a5972130b75066c82595a1fae3\', \'Emilio\', \'Granido\', \'54634213J\', \'emiliogranido@gmail.es\', \'mauroesgay660683298\',\'alumno3.png\', 32004, NULL, \'01248475669852146521\', \'monitores\', \'1992-12-05\'),
+(24, \'monitor2\', \'73acd9a5972130b75066c82595a1fae3\', \'John \', \'Aragon\', \'47854765D\', \'john@gmail.com\', \'mauroesgay660683298\',\'alumno4.jpg\', 32004, NULL, \'0124547865214875\', \'monitores\', \'1989-12-18\');
 
-INSERT INTO `usuario` (`ID`, `USUARIO`, `PASSWORD`, `NOMBRE`, `APELLIDOS`, `DNI`, `EMAIL`, `FOTO`, `CODIGOPOSTAL`, `DESCRIPCION`, `CUENTABANCARIA`, `GRUPO_NOMBRE_GRUPO`, `FechaNac`) VALUES
-(3, \'ADMIN\', \'73acd9a5972130b75066c82595a1fae3\', \'Pablo\', \'Gonzalez Rodriguez\', \'39476158B\', \'pablopeiboll@gmail.com\', \'images.jpg\', 36214, \'Este usuario es administrador\', \'32313131\', \'ADMIN\', \'2016-11-02\');
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `acciones`
+--
+ALTER TABLE `acciones`
+  ADD PRIMARY KEY (`NOMBREACCION`);
 
 --
 -- Indices de la tabla `actividad`
@@ -620,10 +859,8 @@ ALTER TABLE `empleado`
 -- Indices de la tabla `espacio`
 --
 ALTER TABLE `espacio`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `USUARIO` (`USUARIO`),
-  ADD KEY `INICIO` (`INICIO`),
-  ADD KEY `FIN` (`FIN`);
+   ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `NOMBRE` (`NOMBRE`);
 
 --
 -- Indices de la tabla `evento`
@@ -723,8 +960,7 @@ ALTER TABLE `not-usu`
 -- Indices de la tabla `notificacion`
 --
 ALTER TABLE `notificacion`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `USUARIO` (`USUARIO`);
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indices de la tabla `servicio`
@@ -755,7 +991,7 @@ ALTER TABLE `alumno`
 -- AUTO_INCREMENT de la tabla `asistencia`
 --
 ALTER TABLE `asistencia`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `caja`
 --
@@ -770,27 +1006,27 @@ ALTER TABLE `consultafisio`
 -- AUTO_INCREMENT de la tabla `espacio`
 --
 ALTER TABLE `espacio`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `gasto`
 --
 ALTER TABLE `gasto`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `inscripcion`
 --
 ALTER TABLE `inscripcion`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `lesion`
 --
@@ -800,7 +1036,7 @@ ALTER TABLE `lesion`
 -- AUTO_INCREMENT de la tabla `linea_factura`
 --
 ALTER TABLE `linea_factura`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `notificacion`
 --
@@ -815,7 +1051,7 @@ ALTER TABLE `servicio`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Restricciones para tablas volcadas
 --
@@ -922,11 +1158,6 @@ ALTER TABLE `not-usu`
   ADD CONSTRAINT `not-usu_ibfk_1` FOREIGN KEY (`IDNOT`) REFERENCES `notificacion` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `not-usu_ibfk_2` FOREIGN KEY (`IDUSU`) REFERENCES `usuario` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Filtros para la tabla `notificacion`
---
-ALTER TABLE `notificacion`
-  ADD CONSTRAINT `notificacion_ibfk_2` FOREIGN KEY (`USUARIO`) REFERENCES `usuario` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `servicio`
@@ -937,7 +1168,7 @@ ALTER TABLE `servicio`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-');			
+');
 
 		$crear_tb->execute();
 		endif;

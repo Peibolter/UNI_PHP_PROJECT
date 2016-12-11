@@ -3,7 +3,7 @@
 
 class cabecera{
 
-    function crear($idioma){ 
+    function crear($idioma,$form){
         
 
 ?>
@@ -18,7 +18,7 @@ class cabecera{
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ET1</title>
+    <title>ET2</title>
 
     <!-- Bootstrap Core CSS -->
     <link href=".././css/bootstrap.min.css" rel="stylesheet">
@@ -96,13 +96,42 @@ class cabecera{
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-            
+
+             <li class="dropdown">
+                
+                   
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu message-dropdown">
+                    <?php for($cont=count($form)-1;$cont>=0;$cont--){ ?>
+                        <li class="message-preview">
+                            <a <?php echo "href=\"..\Controlador\Notificacion_Controller.php?noti=".$form[$cont]['id']."\""; ?> >
+                                <div class="media">
+                                    <span class="pull-left">
+                                       <?php echo "<img class=\"media-object\" src=\"..\Archivos\\".$form[$cont]['foto']."\" alt=\"\" height=\"50\" width=\"50\">";  ?>
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong><?php  echo $form[$cont]['usuarioorigen'];?></strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i><?php  echo $form[$cont]['fecha'];?></p>
+                                        <p><?php  echo $form[$cont]['comentario'];?></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li> <?php  } ?>
+                        <?php if(count($form)>0)
+                        {        ?>
+                        <li class="message-footer">
+                            <a href="..\Controlador\Notificacion_Controller.php?mostrar"><?php  echo $idioma['mostrartodos'];?></a>
+                        </li>
+                        <?php  } ?>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-flag"></i> <b class="caret"></b></a>
                     <ul class="dropdown-menu alert-dropdown">
-                        <li>
+                        <!--<li>
                             <a href="MenuPrincipal_Controller.php?idiomas=gallego"><?php echo $idioma['Gallego']; ?><input type="image" align="right" src="..\Archivos\galicia.png" height="30" width="30"></a>
-                        </li>
+                        </li>-->
                         <li>
                             <a href="MenuPrincipal_Controller.php?idiomas=español"><?php echo $idioma['Español']; ?><input type="image" align="right" src="..\Archivos\españa.gif" height="30" width="30"></a>
                         </li>
