@@ -41,7 +41,7 @@ class cabecera{
     <script src="../datepicker/js/bootstrap-datetimepicker.js"></script>
     <link rel="stylesheet" href="../datepicker/css/bootstrap-datetimepicker.min.css" />
     <script src="../datepicker/js/bootstrap-datetimepicker.es.js"></script>
-
+    <script src="../js/comprobar.js"></script>
 
     <style>
     #col{
